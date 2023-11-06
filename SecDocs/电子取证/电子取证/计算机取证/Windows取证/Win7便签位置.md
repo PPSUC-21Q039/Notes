@@ -1,0 +1,1 @@
+[https://answers.microsoft.com/zh-hans/windows/forum/all/windows-7-%E4%BE%BF%E7%AC%BA/0712dba1-9349-e011-8dfc-68b599b31bf5](https://answers.microsoft.com/zh-hans/windows/forum/all/windows-7-%E4%BE%BF%E7%AC%BA/0712dba1-9349-e011-8dfc-68b599b31bf5)<br />C:\Users\<当前用户名>\AppData\Roaming\Microsoft\Sticky Notes\StickyNotes.snt

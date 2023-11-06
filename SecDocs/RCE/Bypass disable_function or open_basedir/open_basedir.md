@@ -1,0 +1,2 @@
+# 文章
+[从0学习bypass open_basedir姿势 - 先知社区](https://xz.aliyun.com/t/10070#toc-0)<br />[浅谈几种Bypass open_basedir的方法 [ Mi1k7ea ]](https://www.mi1k7ea.com/2019/07/20/%E6%B5%85%E8%B0%88%E5%87%A0%E7%A7%8DBypass-open-basedir%E7%9A%84%E6%96%B9%E6%B3%95/)<br />[php5全版本绕过open_basedir读文件脚本 | 离别歌](https://www.leavesongs.com/bypass-open-basedir-readfile.html)<br />[PHP bypass open_basedir - Diego | BY Blog](http://diego.team/2020/07/28/PHP-bypass-open_basedir/)

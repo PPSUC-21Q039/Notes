@@ -1,0 +1,1 @@
+[[base]MD5强碰撞_小小橘颂子的博客-CSDN博客](https://blog.csdn.net/weixin_74911687/article/details/129310948?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-1-129310948-blog-119637619.235^v38^pc_relevant_anti_vip&spm=1001.2101.3001.4242.2&utm_relevant_index=2)

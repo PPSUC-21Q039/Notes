@@ -1,0 +1,1 @@
+[Kali2020没有volatility怎么安装 - 云千 - 博客园](https://www.cnblogs.com/yunqian2017/p/14769955.html)<br />[内存取证-Volatility安装使用以及一些CTF比赛题目_Bnessy的博客-CSDN博客_volatility安装](https://blog.csdn.net/weixin_44895005/article/details/123917324)<br />[volatility安装插件(以mimikatz为例子)_ruokeqx的博客-CSDN博客](https://blog.csdn.net/weixin_45485719/article/details/107837269)

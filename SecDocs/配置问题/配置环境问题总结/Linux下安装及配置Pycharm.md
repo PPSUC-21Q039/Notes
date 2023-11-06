@@ -1,0 +1,1 @@
+[在Ubuntu中安装并配置Pycharm教程_ZHW_AI课题组的博客-CSDN博客_ubuntu配置pycharm](https://blog.csdn.net/m0_37758063/article/details/111573552)<br />[Ubuntu创建pycharm的快捷方式两种方法（安装pycharm后启动方式）_A_Hou的博客-CSDN博客_ubuntu pycharm 快捷方式](https://blog.csdn.net/weixin_44312186/article/details/98443374)

@@ -1,0 +1,18 @@
+# WP
+[NMAP类型题目 (escapeshellarg,escapeshellcmd使用不当) - mwkks - 博客园](https://www.cnblogs.com/xcj-djx/p/13745899.html)
+# 知识点
+[PHP escapeshellarg()+escapeshellcmd() 之殇](https://paper.seebug.org/164/)<br />nmap写入文件
+```powershell
+nmap -oG file
+```
+```powershell
+nmap -iL flag -oN file
+```
+`iL`和`oN`命令解释如下:<br />`-iL`:
+:::info
+-iL　　从inputfilename文件中读取扫描的目标。在这个文件中要有一个主机或者网络的列表，由空格键、制表键或者回车键作为分割符。如果使用-iL -，nmap就会从标准输入stdin读取主机名字。你可以从指定目标一节得到更加详细的信息`
+:::
+`-oN`:
+:::info
+-oN <filespec> (标准输出)<br />要求将标准输出直接写入指定 的文件。
+:::

