@@ -13,3 +13,65 @@ User SID：SID**安全标识符**（Security Identifiers），是**标识用户*
 注：在经典NT和windows2000中，Local System账户SID S－1-5-18为几乎所有服务提供了安全上下文，该账户具有很大的特权。Windows2003则引入了另外两个“已知SID”来为服务提供一个安全上 下文、即LocalService和NetworkService。
 
 所以RID就是指最后的那一部分，这里的就是指 1001
+
+---
+
+文件系统！！！
+
+
+
+---
+
+## Windows痕迹分析
+
+`dxdiag` DirectX诊断工具，可以查看系统基本信息
+
+`systeminfo`
+
+`wmic bios get serialnumber`：获取电脑序列号
+
+`whoami /user` 查看当前用户的SID
+
+`wmic useraccount get name,sid` 查看所有用户的SID
+
+`%windir%\explorer.exe shell:::{4234d49b-0245-4df3-b780-3893943456e1}` ：查看已安装的软件
+
+Prefetch：查看最近使用过的程序
+
+`recent` 最近打开的文件
+
+## Windows内存取证
+
+![image-20231110002600103](img/Windows取证 杂知识点.assets/image-20231110002600103.png)
+
+```
+python2 vol.py -f memdump.mem imageinfo
+python2 vol.py -f memdump.mem --profile=Win7SP1x86_23418 plist # 打印进程列表
+```
+
+`getsids` 打印拥有每个进程的SID
+
+`hashdump` 转储密码哈希（LM/NTLM）
+
+`netscan` 获取当时的网络连接信息
+
+`hivelist` 注册表解析
+
+`iehistory` 打印IE缓存和历史记录
+
+`mftparser` 打印NTFS主文件表的信息
+
+`shellbags` 打印打开的文件夹的信息（即ShellBags注册表项的信息）
+
+### 加密盘相关
+
+`bitlocker`
+
+`truecryptmaster` 主密钥
+
+`truecryptpassphrase` 缓存密码短语查找
+
+`truecryptsummary`
+
+
+
