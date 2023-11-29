@@ -75,3 +75,22 @@ python2 vol.py -f memdump.mem --profile=Win7SP1x86_23418 plist # 打印进程列
 
 
 
+---
+
+
+
+跳转到某某扇区：
+
+1扇区包含512字节，扇区数*512即为偏移量，跳转过去即可。
+
+---
+
+### 通知内容解析
+
+**Windows 10**
+
+In Windows 10, the notifications are stored in `\Users\<username>\AppData\Local\Microsoft\Windows\Notifications\wpndatabase. db` as an SQLite database.
+
+**Google Chrome Notification**
+
+`C:\Users\OMEN\AppData\Local\Google\Chrome\User Data\Default\Platform Notifications`
