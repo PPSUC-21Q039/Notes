@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AssociationSSIDMap</key>
+	<dict>
+		<key>{length = 10, bytes = 0x746169206970686f6e65}</key>
+		<integer>1</integer>
+		<key>{length = 6, bytes = 0x6950686f6e65}</key>
+		<integer>1</integer>
+		<key>{length = 9, bytes = 0x7461696970686f6e65}</key>
+		<integer>1</integer>
+	</dict>
+	<key>InternalAssociationSSIDMap</key>
+	<dict>
+		<key>{length = 10, bytes = 0x746169206970686f6e65}</key>
+		<integer>1</integer>
+		<key>{length = 6, bytes = 0x6950686f6e65}</key>
+		<integer>1</integer>
+		<key>{length = 9, bytes = 0x7461696970686f6e65}</key>
+		<integer>1</integer>
+	</dict>
+	<key>LastSubmissionTimestamp</key>
+	<date>2023-10-30T03:46:25Z</date>
+	<key>PendingList</key>
+	<array/>
+</dict>
+</plist>
