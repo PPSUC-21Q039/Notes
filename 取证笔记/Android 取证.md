@@ -16,7 +16,7 @@
 
 ![img](img/Android 取证.assets/2817142-20230925202523630-1194720093.png)
 
-## WiFi 配置文件
+## WiFi 配置文件（原生应用）
 
 `WifiConfigStore.xml`
 
@@ -28,7 +28,7 @@
 
 搜索一共有几个SSID即可。
 
-## Android手机短信记录
+## Android 手机短信记录（原生应用）
 
 `mmssms.db`
 
@@ -37,3 +37,31 @@
 sms表中read字段值为0表示未读，type字段值为1表示接收的短信：
 
 ![img](img/Android 取证.assets/2817142-20230925202522627-1869491332.png)
+
+
+
+# Android Whatsapp 应用取证（非原生，通用）
+
+`\data\com.whatsapp\databases\msgstore.db`
+
+<img src="img/Android 取证.assets/image-20231206013904904.png" alt="image-20231206013904904" style="zoom:50%;" />
+
+数据在 `chat` 表里面：
+
+![image-20231206013946385](img/Android 取证.assets/image-20231206013946385.png)
+
+包括了 创建时间等，但是并没有找到WP里面的 `message_type`。
+
+WP:
+
+> ## 87.参考’潘志辉的手机镜像HUAWEIP30pro’,潘志辉手机华为P30Pro的WhatsApp的有多少个对话群组不包含对话讯息记录(系统自行发出的不作计算)?(2分)
+>
+> 先看一下有多少群组，根据chatid去看内容
+>
+> [![img](img/Android 取证.assets/2817142-20231123224903232-2048110326.png)](https://img2023.cnblogs.com/blog/2817142/202311/2817142-20231123224903232-2048110326.png)
+>
+> 通过分析，`message_type`的值为7表示系统消息，写个sql，剩下3个没有消息记录
+>
+> [![img](img/Android 取证.assets/2817142-20231123224903025-998128093.png)](https://img2023.cnblogs.com/blog/2817142/202311/2817142-20231123224903025-998128093.png)
+>
+> 结果为`3`

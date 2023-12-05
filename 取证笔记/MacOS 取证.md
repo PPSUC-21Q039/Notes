@@ -12,6 +12,8 @@ Recent Log:
 
 这个取证软件是可以分析出来的。
 
+
+
 ## WiFi 记录
 
 `\BenChen_MacBookPro_2023-1\Library\Preferences\SystemConfiguration\com.apple.wifi.message-tracer.plist`
@@ -84,4 +86,28 @@ https://forensicsandsecurity.com/papers/SpotlightMacForensicsSlides.pdf
 
 是什么：每个已安装卷的Spotlight元数据。该**m[dw](https://link.zhihu.com/?target=https%3A//www.macdown.com/z/s_4.html)orker**进程使用这个元数据来更新Spotlight搜索。
 
-![image-20231206012338952](img/MacOS 取证.assets/image-20231206012338952.png)
+<img src="img/MacOS 取证.assets/image-20231206012338952.png" alt="image-20231206012338952" style="zoom:67%;" />
+
+考题：
+
+> ## 59.参考’陈大昆MacBook镜像文件’,按照您的检验，以下哪个陈述（或多个陈述）在描述路径“~/Desktop/.Spotlight-V100/”下的文件是正确的?(3分)
+>
+> A."coins1.jpg alias"是一个档案捷径(alias)
+>
+> B."coins.jpg alias"和"coins1.jpgalias"都是符号链接(Symlink)文件
+>
+> C."CryptoWallet-link1"是一个档案捷径(alias)
+>
+> D."CryptoWallet-link1"和"CryptoWallet-link2"链接相同的文件
+>
+> E."CryptoWallet-link2"是一个硬链接(HardLink)
+>
+> `coins1.jpg alias`是快捷方式
+>
+> [![img](img/MacOS 取证.assets/2817142-20231123224902964-1294457219.png)](https://img2023.cnblogs.com/blog/2817142/202311/2817142-20231123224902964-1294457219.png)
+>
+> `CryptoWallet-link1`和`CryptoWallet-link2`哈希都相同，查看历史命令
+>
+> [![img](img/MacOS 取证.assets/2817142-20231123224902773-603795222.png)](https://img2023.cnblogs.com/blog/2817142/202311/2817142-20231123224902773-603795222.png)
+>
+> 结果为`ACD`
