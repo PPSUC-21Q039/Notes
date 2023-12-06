@@ -65,3 +65,20 @@ WP:
 > [![img](img/Android 取证.assets/2817142-20231123224903025-998128093.png)](https://img2023.cnblogs.com/blog/2817142/202311/2817142-20231123224903025-998128093.png)
 >
 > 结果为`3`
+
+# 获取APK
+
+ADB环境下：
+1、连接手机
+输入adb命令：adb devices
+
+2、打开手机对应的软件
+
+3、获取当前界面正在运行应用的包名：
+输入adb命令：adb shell dumpsys window | findstr  mCurrentFocus
+
+4、获取APK文件路径；注：package-name是上一步中获取的包名
+输入adb命令：adb shell pm path “package-name”     
+
+5、将APK导出到PC端进行保存
+输入adb命令：adb pull “手机APK文件路径”“PC文件夹路径”
