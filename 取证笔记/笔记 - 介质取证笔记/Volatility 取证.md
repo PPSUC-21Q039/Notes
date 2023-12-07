@@ -1,5 +1,13 @@
 # Volatility 内存取证
 
+## 配合使用其他命令
+
+`grep -i "" -C 20` 显示20行
+
+`strings -e l ` 使用小端序模式
+
+##常用命令
+
 Volatility 3:
 
 ```
@@ -23,10 +31,6 @@ vol.py -f MemoryDump.mem --profile=Win10x64_19041 pstree
 
 vol.py -f win7_trial_64bit.raw --profile=Win7SP0x64 procdump -D dump/ -p 296
 ```
-
-
-
-## 常用命令
 
 - imageinfo
 - 进程分析
@@ -58,6 +62,58 @@ vol.py -f win7_trial_64bit.raw --profile=Win7SP0x64 procdump -D dump/ -p 296
   - Dumpregitry
 - Dump指定进程
   - vol3 -f memdump.mem -o pid6988/ windows.pslist.PsList --pid 6988
+
+```
+注意看Volatility的Readme
+```
+
+## shimcache
+
+`vol.py -f ./Triage-Memory.mem --profile=Win7SP1x64 shimcache | grep -i '2019-03-07 23:06:58'`
+
+查看程序运行时间。
+
+<img src="img/Volatility 取证.assets/image-20231208003000712.png" alt="image-20231208003000712" style="zoom:67%;" />
+
+## procdump vs memdump
+
+`procdump` 是针对进程的，dump下来的是进程本身，不包含其他数据，`memdump` 是针对进程及其数据的，包含正在使用的内存。
+
+<img src="img/Volatility 取证.assets/image-20231208003445027.png" alt="image-20231208003445027" style="zoom:67%;" />
+
+<img src="img/Volatility 取证.assets/image-20231208003501723.png" alt="image-20231208003501723" style="zoom:67%;" />
+
+## mftparser 根据 Record 寻找文件
+
+![image-20231208003824461](img/Volatility 取证.assets/image-20231208003824461.png)
+
+## VAD
+
+`vadinfo` ：可以查看进程的VAD信息，通常配合 grep 使用。
+
+ https://cyberdefenders.org/blueteam-ctf-challenges/65#nav-questions
+
+<img src="img/Volatility 取证.assets/image-20231208001006623.png" alt="image-20231208001006623" style="zoom:67%;" />
+
+<img src="img/Volatility 取证.assets/image-20231208001048094.png" alt="image-20231208001048094" style="zoom:67%;" />
+
+https://blackninja23.medium.com/cyberdefenders-writeup-dumpme-644d5c2a6f3a
+
+Ten challenge: What memory protection constants does the VAD node at 0xfffffa800577ba10 have?What is VAD? VAD is used by the Windows memory manager to describe memory ranges used by a process as they are allocated. When a process allocates memory with VirutalAlloc, the memory manager creates an entry in the VAD tree. You can read more from https://www.sciencedirect.com/science/article/pii/S1742287607000503 Plugin that we can use is vadinfo.
+
+COMMAND: `python2 volatility/vol.py -f Triage-Memory.mem — profile=Win7SP1x64 vadinfo|grep 0xfffffa800577ba10 -C 4`
+
+Now we can see protection is PAGE_READONLY
+
+Eleven Challenge: What memory protection did the VAD starting at 0x00000000033c0000 and ending at 0x00000000033dffff have?
+
+Command: `python2 volatility/vol.py -f Triage-Memory.mem — profile=Win7SP1x64 vadinfo|grep ‘0x00000000033c0000 End 0x00000000033dffff’ -C 4`
+
+Our permission now is PAGE_NOACCESS
+
+
+
+## Volatility 2、3区别
 
 ---
 
