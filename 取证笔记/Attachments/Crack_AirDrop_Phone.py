@@ -12,7 +12,7 @@ for begin in begins:
         v = area_code+begin+"0"*(8-len(str(i))) + str(i)
         s256.update(v.encode('utf-8'))
         _hash = s256.hexdigest()
-        if _hash[:5] == "eeb48" and _hash[-5:] == "2d99d":
+        if _hash[:5] == "eeb59" and _hash[-5:] == "2d29d":
             print("手机号已找到")
             print(begin+"0"*(8-len(str(i))) + str(i))
             sys.exit(0)

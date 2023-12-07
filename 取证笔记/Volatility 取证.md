@@ -22,3 +22,184 @@ vol.py -f MemoryDump.mem --profile=Win10x64_19041 pslist
 vol.py -f MemoryDump.mem --profile=Win10x64_19041 pstree
 ```
 
+
+
+---
+
+> volatility3和volatility有很大的区别
+>
+> 查看镜像信息，volatility会进行分析`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.info`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506967-1588202177.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506967-1588202177.png)
+>
+> 查看进程`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.pslist`或者`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.pstree`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506960-788048027.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506960-788048027.png)
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506941-755922693.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506941-755922693.png)
+>
+> 列出缓冲池`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.bigpools.BigPools`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506938-651917442.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506938-651917442.png)
+>
+> 转储密码`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.cachedump.Cachedump`，不过我这边没有成功，不知道原因
+>
+> 调出内存回调`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.callbacks.Callbacks`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507000-1945680295.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507000-1945680295.png)
+>
+> 查看进程命令行参数`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.cmdline.CmdLine`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506975-1320374828.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506975-1320374828.png)
+>
+> 不知道是干啥的，手册里没有给出描述，运行也报错`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.crashinfo.Crashinfo`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506977-69864130.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506977-69864130.png)
+>
+> 列出设备，乱码`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.devicetree.DeviceTree`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506967-657875075.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506967-657875075.png)
+>
+> 列出dll`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.dlllist.DllList`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506987-1022951234.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506987-1022951234.png)
+>
+> 列出驱动的irp`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.driverirp.DriverIrp`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507003-1834044733.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507003-1834044733.png)
+>
+> 扫描驱动`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.drivescan.DriverScan`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507059-1793429953.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507059-1793429953.png)
+>
+> 转储文件`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.dumpfiles.DumpFiles`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506978-478754450.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506978-478754450.png)
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507002-1515029379.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507002-1515029379.png)
+>
+> 列出进程的环境变量`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.envars.Envars`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506994-1752906556.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506994-1752906556.png)
+>
+> 扫描文件`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.filescan.FileScan`还是有乱码，可能是编码问题
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507041-67136686.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507041-67136686.png)
+>
+> 列出tokensid`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.getservicesids.GetServiceSIDs`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507069-1724233560.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507069-1724233560.png)
+>
+> 列出每个进程的sid`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.getsids.GetSIDs`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507067-1872061646.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507067-1872061646.png)
+>
+> 列出进程句柄`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.handles.Handles`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223506998-1301539649.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223506998-1301539649.png)
+>
+> 列出用户哈希`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.hashdump.Hashdump`不过我这个镜像没有
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507064-1712936084.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507064-1712936084.png)
+>
+> 转储lsa密码，与cache类似`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.lsadump.Lsadump`
+>
+> 列出可能包含注入代码的进程内存范围`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.malfind.Malfind`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507071-1976086630.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507071-1976086630.png)
+>
+> 扫描并分析潜在的主引导记录`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.mbrscan.MBRScan`
+>
+> 输出内存映射`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.memmap.Memmap`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507040-409919285.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507040-409919285.png)
+>
+> 扫描特定windows内存映像`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.mftscan.MFTScan`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507102-1498425562.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507102-1498425562.png)
+>
+> 扫描模块`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.modscan.ModScan`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507127-1671906270.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507127-1671906270.png)
+>
+> 列出加载的内核模块`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.modules.Modules`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507104-470289345.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507104-470289345.png)
+>
+> 扫描互斥的mutex`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.mutantscan.MutantScan`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507103-1028632372.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507103-1028632372.png)
+>
+> 扫描网络对象`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.netscan.NetScan`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507127-1974639972.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507127-1974639972.png)
+>
+> 输出网络状态`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.netstat.NetStat`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507097-314557007.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507097-314557007.png)
+>
+> 通用池扫描程序插件`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.poolscanner.PoolScanner`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507063-175644933.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507063-175644933.png)
+>
+> 列出进程token权限`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.privileges.Privs`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507064-1705096112.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507064-1705096112.png)
+>
+> 扫描进程`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.psscan.PsScan`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507066-742085360.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507066-742085360.png)
+>
+> 列出注册表证书存储中的证书`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.registry.certificates.Certificates`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507129-768351659.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507129-768351659.png)
+>
+> 列出注册表配置单元`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.registry.hivelist.HiveList`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507067-1291257670.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507067-1291257670.png)
+>
+> 扫描注册表配置单元`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.registry.hivescan.HiveScan`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507078-2001030875.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507078-2001030875.png)
+>
+> 列出配置单元或特定键值下的注册表项`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.registry.printkey.PrintKey`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507064-1197845523.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507064-1197845523.png)
+>
+> 打印userassist注册表项和信息`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.registry.userassist.UserAssist`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507151-846942889.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507151-846942889.png)
+>
+> 列出从环境变量中提取会话信息的流程`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.sessions.Sessions`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507103-958710507.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507103-958710507.png)
+>
+> 查找骨架键恶意软件的迹象`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.skeleton_key_check.Skeleton_Key_Check`无结果
+>
+> 列出系统调用表`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.ssdt.SSDT`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507126-1111250578.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507126-1111250578.png)
+>
+> 读取strings命令的输出，并指示每个字符串属于哪个进程`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.strings.Strings`不会用
+>
+> 扫描服务`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.svcscan.SvcScan`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507107-543927398.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507107-543927398.png)
+>
+> 扫描链接`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.symlinkscan.SymlinkScan`乱码
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507098-466549369.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507098-466549369.png)
+>
+> 列出进程内存范围`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.vadinfo.VadInfo`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507129-906588070.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507129-906588070.png)
+>
+> 使用yara扫描所有虚拟地址描述符内存映射`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.vadyarascan.VadYaraScan`报错
+>
+> 列出PE文件中的版本信息`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.verinfo.VerInfo`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507103-1121357943.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507103-1121357943.png)
+>
+> 列出虚拟映射session`python vol.py -f F:\BaiduNetdiskDownload\ZKSS-2018\Q1.Windows7_memory.dd windows.virtmap.VirtMap`
+>
+> [![img](img/Volatility 取证.assets/2817142-20220605223507089-1827140093.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223507089-1827140093.png)
