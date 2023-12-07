@@ -66,19 +66,19 @@ WP:
 >
 > 结果为`3`
 
-# 获取APK
+# 获取 APK
 
-ADB环境下：
+ADB 环境下：
 1、连接手机
-输入adb命令：adb devices
+输入 adb 命令：`adb devices`
 
 2、打开手机对应的软件
 
 3、获取当前界面正在运行应用的包名：
-输入adb命令：adb shell dumpsys window | findstr  mCurrentFocus
+输入 adb 命令：`adb shell dumpsys window | findstr  mCurrentFocus`
 
 4、获取APK文件路径；注：package-name是上一步中获取的包名
-输入adb命令：adb shell pm path “package-name”     
+输入 adb 命令：`adb shell pm path “package-name”`     
 
-5、将APK导出到PC端进行保存
-输入adb命令：adb pull “手机APK文件路径”“PC文件夹路径”
+5、将 APK 导出到 PC 端进行保存
+输入 adb 命令：`adb pull “手机APK文件路径” “PC文件夹路径”`

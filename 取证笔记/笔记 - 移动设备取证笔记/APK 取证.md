@@ -1,5 +1,28 @@
 # APK 取证
 
+
+
+## 获取 APK
+
+ADB 环境下：
+1、连接手机
+输入 adb 命令：`adb devices`
+
+2、打开手机对应的软件
+
+3、获取当前界面正在运行应用的包名：
+输入 adb 命令：`adb shell dumpsys window | findstr  mCurrentFocus`
+
+4、获取APK文件路径；注：package-name是上一步中获取的包名
+输入 adb 命令：`adb shell pm path “package-name”`     
+
+5、将 APK 导出到 PC 端进行保存
+输入 adb 命令：`adb pull “手机APK文件路径” “PC文件夹路径”`
+
+
+
+
+
 ## 查看APP兼容性（即支持哪些安卓版本）
 
 在ManiFest里面的`uses-sdk`里面能看到使用的SDK，可以查到对应的安卓版本：
@@ -10,7 +33,7 @@ https://developer.android.google.cn/studio/releases/platforms?hl=zh-cn
 
 <img src="img/APK 取证.assets/image-20231203230211541.png" alt="image-20231203230211541" style="zoom:33%;" />
 
-## APK 功能定位技巧
+## APK 功能、函数定位技巧
 
 https://www.cnblogs.com/WXjzc/protected/p/17842642.html
 
@@ -36,7 +59,7 @@ WXjzcccc17842642
 >
 > [![img](img/APK 取证.assets/2817142-20231119205819266-737559474.png)](https://img2023.cnblogs.com/blog/2817142/202311/2817142-20231119205819266-737559474.png)
 >
-> 看引入字符的方法，就算没有异常里的提示，也可以通过字符集来判断是`Base58`
+> 看引入字符的方法，就算没有异常里的提示，也可以通过字符集来判断是 `Base58`
 >
 > [![img](img/APK 取证.assets/2817142-20231119205819155-1182437434.png)](https://img2023.cnblogs.com/blog/2817142/202311/2817142-20231119205819155-1182437434.png)
 >
