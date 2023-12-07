@@ -20,9 +20,44 @@ Volatility 2:
 vol.py -f MemoryDump.mem --profile=Win10x64_19041 netscan
 vol.py -f MemoryDump.mem --profile=Win10x64_19041 pslist
 vol.py -f MemoryDump.mem --profile=Win10x64_19041 pstree
+
+vol.py -f win7_trial_64bit.raw --profile=Win7SP0x64 procdump -D dump/ -p 296
 ```
 
 
+
+## 常用命令
+
+- imageinfo
+- 进程分析
+  - pslist/pstree
+  - dlllist
+  - svscan
+  - svcscan
+  - malscan
+  - psxview 查看被隐藏的进程
+  - procdump
+  - memdump
+    - 将进程导出
+- netscan
+- cmdline/cmdscan
+- clipboard
+- iehistory
+  - 如果需要解析其他浏览器的，可以自行添加扩展（Plugins）
+- 密码/密钥
+  - hashdump
+  - truecryptsummary/truecryptmaster/truecryptpassphrase
+  - bitlocker
+- 文件系统
+  - filescan
+  - mftparser
+  - timeliner
+- 注册表
+  - printkey
+  - hivelist
+  - Dumpregitry
+- Dump指定进程
+  - vol3 -f memdump.mem -o pid6988/ windows.pslist.PsList --pid 6988
 
 ---
 

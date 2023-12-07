@@ -104,3 +104,21 @@ In Windows 10, the notifications are stored in `\Users\<username>\AppData\Local\
 提取windows的密码ntml哈希值`8035e98e98f326b52d7ce132a20b229c`
 
 解密得到密码为`aA1234`[![img](img/Windows取证 杂知识点.assets/2817142-20220816172011265-892620734.png)](https://img2022.cnblogs.com/blog/2817142/202208/2817142-20220816172011265-892620734.png)
+
+## LM / NTLM
+
+https://www.cnblogs.com/Azjj/p/14014064.html
+
+```
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+Bob:1000:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+```
+
+以上的格式为：username:RID:LM-HASH:NT-HASH
+
+也就是说，对于Bob用户，LM Hash是`aad3b435b51404eeaad3b435b51404ee` ，NT Hash是`31d6cfe0d16ae931b73c59d7e0c089c0`。
+
+> LM Hash全名为“LAN Manager Hash”，是微软为了提高Windows操作系统的安全性而采用的散列加密算法，其本质是DES加密。尽管LM Hash较容易被破解，但是为了保证系统的兼容性，Windows只是将LM Hash禁用了(从Windows Vista和Windows Server 2008版本开始，Windows操作系统默认禁用LM Hash)，LM Hash明文密码被限制在14位以内，也就是说，如果要停止使用LM Hash，将用户的密码设置为14位以上就好了。如果LM Hash被禁用了，攻击者提高工具抓取的LM Hash通常为"aad3b435b51404eeaad3b435b51404ee"。
+>
+> NTLMHash是微软为了在提高安全性的同时保证兼容性而设计的散列加者算法，NTLMHash是基于MD4加密算法进行加密的。个人版从Windows Vista以后，服务器版从Wndows Sever2003以后，Windows 操作系统的认证方式均为NTLM Hash.
