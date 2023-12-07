@@ -94,3 +94,13 @@ In Windows 10, the notifications are stored in `\Users\<username>\AppData\Local\
 **Google Chrome Notification**
 
 `C:\Users\OMEN\AppData\Local\Google\Chrome\User Data\Default\Platform Notifications`
+
+## Windows 镜像密码破解
+
+可以将获得的windows镜像先挂载获取SAM和SYSTEM注册表文件，然后使用mimikatz
+
+[![img](img/Windows取证 杂知识点.assets/2817142-20220816172011223-116442487.png)](https://img2022.cnblogs.com/blog/2817142/202208/2817142-20220816172011223-116442487.png)
+
+提取windows的密码ntml哈希值`8035e98e98f326b52d7ce132a20b229c`
+
+解密得到密码为`aA1234`[![img](img/Windows取证 杂知识点.assets/2817142-20220816172011265-892620734.png)](https://img2022.cnblogs.com/blog/2817142/202208/2817142-20220816172011265-892620734.png)
