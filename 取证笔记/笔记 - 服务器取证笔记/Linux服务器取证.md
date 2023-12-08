@@ -26,6 +26,20 @@
 
 仿真完成后要先确认开启ssh服务，方便我们后续进行操作
 
+## 密码破解
+
+主要是针对 `shadow` 文件，使用 `john` ，Kali Linux 自带了的。
+
+> ### 2、查询服务器用户名“wangwu”的登录密码为【标准格式：123456】
+>
+> 如果直接问密码，那么大概率就是弱口令了，可以使用join来进行爆破，由于只需要wangwu的，就只保留wangwu和liumosheng，不去爆破root的密码，[点我查看如何安装 join](https://blog.csdn.net/zhydream77/article/details/98601128)
+>
+> [![img](img/Linux服务器取证.assets/2817142-20220605223526595-873332476.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223526595-873332476.png)
+>
+> [![img](img/Linux服务器取证.assets/2817142-20220605223526558-1430204492.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223526558-1430204492.png)
+>
+> 结果为`root`
+
 ---
 
 > # CentOS6 破解密码
