@@ -15,41 +15,41 @@
 
 macOS中主要的系统信息存储位置如下：
 
-> 系统版本：/System/Library/CoreServices/SystemVersion.plist
+> 系统版本：`/System/Library/CoreServices/SystemVersion.plist`
 >
-> 语言和时区：/Library/Preferences/.GlobalPreferences.plist
+> 语言和时区：`/Library/Preferences/.GlobalPreferences.plist`
 >
-> 系统设置：/Library/Preferences/SystemConfiguration/preferences.plist
+> 系统设置：`/Library/Preferences/SystemConfiguration/preferences.plist`
 >
-> 最后更新：/Library/Preferences/com.apple.SoftwareUpdate.plist
+> 最后更新：`/Library/Preferences/com.apple.SoftwareUpdate.plist`
 >
 > 最后休眠时间：
 >
-> /Library/Preferences/SystemConfigurations/com.apple.PowerManagement.plist
+> `/Library/Preferences/SystemConfigurations/com.apple.PowerManagement.plist`
 >
-> 蓝牙记录：/Library/Preferences/com.apple.Bluetooth.plist
+> 蓝牙记录：`/Library/Preferences/com.apple.Bluetooth.plist`
 >
-> 键盘设置：/Library/Preferences/com.apple.HIToolbox.plist
+> 键盘设置：`/Library/Preferences/com.apple.HIToolbox.plist`
 >
-> 打印机设置：/Library/Preferences/org.cups.printers.plist
+> 打印机设置：`/Library/Preferences/org.cups.printers.plist`
 >
-> 时间机器：/Library/Preferences/com.apple.TimeMachine.plist
+> 时间机器：`/Library/Preferences/com.apple.TimeMachine.plist`
 >
-> 防火墙：/Library/Preferences/com.apple.alf.plist
+> 防火墙：`/Library/Preferences/com.apple.alf.plist`
 >
-> AirPort：/Library/Preferences/SystemConfigurations/com.apple.airport. preferences.plist
+> AirPort：`/Library/Preferences/SystemConfigurations/com.apple.airport. preferences.plist`
 >
-> 用户信息：/private/var/db/dslocal/nodes/Default/Users/
+> 用户信息：`/private/var/db/dslocal/nodes/Default/Users/`
 >
-> 最后登录的用户：/Library/Preferences/com.apple.loginwindow.plist
+> 最后登录的用户：`/Library/Preferences/com.apple.loginwindow.plist`
 >
-> MAC地址：/private/var/log/daily.out
+> MAC地址：`/private/var/log/daily.out`
 >
-> 启动项：/Library/LaunchAgents/、/Library/LaunchDaemons/、/System/Library/LaunchAgents/、/System/Library/LaunchDaemons/
+> 启动项：`/Library/LaunchAgents/`、`/Library/LaunchDaemons/`、`/System/Library/LaunchAgents/`、`/System/Library/LaunchDaemons/`
 >
-> 隔空投送（AirDrop）：/var/db/uuidtext/
+> 隔空投送（AirDrop）：`/var/db/uuidtext/`
 >
-> USB连接记录：/private/var/db/diagnostics/persist/XXXXX.tracev3
+> USB连接记录：`/private/var/db/diagnostics/persist/XXXXX.tracev3`
 >
 > ---
 >
@@ -57,17 +57,17 @@ macOS中主要的系统信息存储位置如下：
 >
 > macOS中包含大量最近使用痕迹，主要信息及存储位置如下：
 >
-> ①最近使用的项目：~/Library/ApplicationSupport/com.apple.sharedfilelist
+> ①最近使用的项目：`~/Library/ApplicationSupport/com.apple.sharedfilelist`
 >
-> ②最近使用的程序：com.apple.LSSharedFileList.RecentApplications.sfl
+> ②最近使用的程序：`com.apple.LSSharedFileList.RecentApplications.sfl`
 >
-> ③最近使用的文稿：com.apple.LSSharedFileList.RecentDocuments.sfl
+> ③最近使用的文稿：`com.apple.LSSharedFileList.RecentDocuments.sfl`
 >
-> ④最近访问过的服务器：com.apple.LSSharedFileList.RecentHosts.sfl和com.apple.LSSharedFileList.RecentServers.sfl
+> ④最近访问过的服务器：`com.apple.LSSharedFileList.RecentHosts.sfl和com.apple.LSSharedFileList.RecentServers.sfl`
 >
-> ⑤每个程序的最近使用记录：com.apple.LSSharedFileList.ApplicationRecentDocuments
+> ⑤每个程序的最近使用记录：`com.apple.LSSharedFileList.ApplicationRecentDocuments`
 >
-> ⑥访达最近使用的文件夹：~/Library/Preferences/com.apple.finder.plist
+> ⑥访达最近使用的文件夹：`~/Library/Preferences/com.apple.finder.plist`
 >
 > ![image-20231107125557192](img/MacOS 取证.assets/image-20231107125557192.png)
 
@@ -191,11 +191,11 @@ Safari是macOS自带的浏览器程序，绝大多数核心数据以Plist文件�
 
 ### 邮件记录
 
-用户在使用系统邮件客户端时产生的数据存储在“~/Library/Mail/V#”中，目前最新版本为V8，因此实际存储位置为“~/Library/Mail/V8”，如图所示。V8目录下，“Maildata/Signatures/”记录了邮件客户端中添加的邮件账户及其签名信息，主要分布在AccountsMap.plist和AllSignatures.plist文件中。V8下存储的两个名称较长的目录即AccountsMap.plist中对应的账户，账户目录下包含发件箱、收件箱、垃圾邮件、草稿、已发送邮件、已删除邮件等重要数据。
+用户在使用系统邮件客户端时产生的数据存储在`~/Library/Mail/V#`中，目前最新版本为V8，因此实际存储位置为`~/Library/Mail/V8`，如图所示。V8目录下，`Maildata/Signatures/`记录了邮件客户端中添加的邮件账户及其签名信息，主要分布在`AccountsMap.plist`和`AllSignatures.plist`文件中。V8下存储的两个名称较长的目录即`AccountsMap.plist`中对应的账户，账户目录下包含发件箱、收件箱、垃圾邮件、草稿、已发送邮件、已删除邮件等重要数据。
 
 <img src="img/MacOS 取证.assets/image-20231211155046451.png" alt="image-20231211155046451" style="zoom:67%;" />
 
-如上图右侧内容所示，邮件的核心数据均存储在这些以.mbox结尾的目录中，以收件箱.mbox为例，Data目录中每个数字子目录代表一个组（macOS邮件客户端的智能邮箱分组），每个组中均有“Attachments”和“Messages”两个目录，分别存储邮件附件（支持直接打开查看）和邮件文件（即emlx文件，默认通过邮件客户端程序打开，支持文本方式查看邮件头信息），如下图所示。
+如上图右侧内容所示，邮件的核心数据均存储在这些以`.mbox`结尾的目录中，以收件箱`.mbox`为例，Data目录中每个数字子目录代表一个组（macOS邮件客户端的智能邮箱分组），每个组中均有`Attachments`和`Messages`两个目录，分别存储邮件附件（支持直接打开查看）和邮件文件（即emlx文件，默认通过邮件客户端程序打开，支持文本方式查看邮件头信息），如下图所示。
 
 <img src="img/MacOS 取证.assets/image-20231211155103716.png" alt="image-20231211155103716" style="zoom:67%;" />
 
@@ -299,7 +299,7 @@ https://forensicsandsecurity.com/papers/SpotlightMacForensicsSlides.pdf
 
 考题：
 
-> ##### 59.参考’陈大昆MacBook镜像文件’,按照您的检验，以下哪个陈述（或多个陈述）在描述路径“~/Desktop/.Spotlight-V100/”下的文件是正确的?(3分)
+> ##### 59.参考’陈大昆MacBook镜像文件’,按照您的检验，以下哪个陈述（或多个陈述）在描述路径`~/Desktop/.Spotlight-V100/`下的文件是正确的?(3分)
 >
 > A."coins1.jpg alias"是一个档案捷径(alias)
 >
@@ -347,17 +347,17 @@ MacOS 10.7及以后中，保存在 `/var/db/dslocal/nodes/Default/users/` 下的
 
 在取证过程中，macOS时间戳提供了大量有用信息，图6-7所示的是在一个docx文件上运行mdls命令的显示信息，其中重要的时间戳有：
 
-①内容创建时间：kMDItemContentCreationDate
+①内容创建时间：`kMDItemContentCreationDate`
 
-②内容修改时间：kMDItemContentModificationDate
+②内容修改时间：`kMDItemContentModificationDate`
 
-③添加时间：kMDItemDateAdded（这是文件被添加到当前目录的时间）
+③添加时间：`kMDItemDateAdded`（这是文件被添加到当前目录的时间）
 
-④内容改变时间：kMDItemFSContentChangeDate
+④内容改变时间：`kMDItemFSContentChangeDate`
 
-⑤文件创建时间：kMDItemFSCreationDate
+⑤文件创建时间：`kMDItemFSCreationDate`
 
-⑥上次使用时间：kMDItemLastUsedDate
+⑥上次使用时间：`kMDItemLastUsedDate`
 
 <img src="img/MacOS 取证.assets/image-20231211155801660.png" alt="image-20231211155801660" style="zoom:67%;" />
 
@@ -458,5 +458,5 @@ Caches目录存储着每个应用的缓存数据，大部分缓存文件存储�
 
 #### Group
 
-系统默认下，普通用户被指定为“staff”组，管理员被指定为“admin”组和“staff”组，而root账户，则会被指定为“wheel”组。
+系统默认下，普通用户被指定为`staff`组，管理员被指定为`admin`组和`staff`组，而`root`账户，则会被指定为`wheel`组。
 
