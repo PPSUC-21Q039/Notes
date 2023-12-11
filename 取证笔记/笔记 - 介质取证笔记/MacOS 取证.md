@@ -39,15 +39,17 @@ macOS中主要的系统信息存储位置如下：
 >
 > AirPort：`/Library/Preferences/SystemConfigurations/com.apple.airport. preferences.plist`
 >
-> 用户信息：`/private/var/db/dslocal/nodes/Default/Users/`
+> **用户信息**：`/private/var/db/dslocal/nodes/Default/Users/`
 >
 > 最后登录的用户：`/Library/Preferences/com.apple.loginwindow.plist`
+>
+> ​	<img src="img/MacOS 取证.assets/image-20231211184028783.png" alt="image-20231211184028783" style="zoom: 67%;" />
 >
 > MAC地址：`/private/var/log/daily.out`
 >
 > 启动项：`/Library/LaunchAgents/`、`/Library/LaunchDaemons/`、`/System/Library/LaunchAgents/`、`/System/Library/LaunchDaemons/`
 >
-> 隔空投送（AirDrop）：`/var/db/uuidtext/`
+> 隔空投送（AirDrop）：`/private/var/db/uuidtext/`
 >
 > USB连接记录：`/private/var/db/diagnostics/persist/XXXXX.tracev3`
 >
@@ -57,7 +59,9 @@ macOS中主要的系统信息存储位置如下：
 >
 > macOS中包含大量最近使用痕迹，主要信息及存储位置如下：
 >
-> ①最近使用的项目：`~/Library/ApplicationSupport/com.apple.sharedfilelist`
+> ①最近使用的项目：`~/Library/Application Support/com.apple.sharedfilelist`
+>
+> ​	<img src="img/MacOS 取证.assets/image-20231211195740537.png" alt="image-20231211195740537" style="zoom:67%;" />
 >
 > ②最近使用的程序：`com.apple.LSSharedFileList.RecentApplications.sfl`
 >
@@ -70,6 +74,14 @@ macOS中主要的系统信息存储位置如下：
 > ⑥访达最近使用的文件夹：`~/Library/Preferences/com.apple.finder.plist`
 >
 > ![image-20231107125557192](img/MacOS 取证.assets/image-20231107125557192.png)
+
+![image-20231211183657158](img/MacOS 取证.assets/image-20231211183657158.png)
+
+这里面的 `daily.out` 文件东西比较多，像是每天的一个总结。
+
+![image-20231211184306523](img/MacOS 取证.assets/image-20231211184306523.png)
+
+![image-20231211184311104](img/MacOS 取证.assets/image-20231211184311104.png)
 
 ## 系统日志
 
