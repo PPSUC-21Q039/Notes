@@ -223,7 +223,7 @@ iMessage的消息记录存储在`/Library/Messages/Attachments/`目录中。
 
 微信是腾讯公司推出的一款综合社交工具，广受用户欢迎。相比其他平台，Mac版微信虽然用户基数不大，但作为与手机微信交互的重要数据源，往往在案件中发挥着意想不到的作用。
 
-微信的用户数据存储在`~/Library/Containers/com.tencent.xinWeChat/Data/Library/ Application Support/com.tencent.xinWeChat/<版本号>/<MD5字符串>/`目录下。
+微信的用户数据存储在`~/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/<版本号>/<MD5字符串>/`目录下。
 
 当然，微信出于安全性保护，上述关键信息中绝大部分db格式的SQLite数据库都处于加密状态，解密密钥并不在计算机本地离线存储，且加密方式与手机微信截然不同，暴力破解的可行性微乎其微。因此需要在联网状态下借助常规登录方式（帐号密码、手机验证等）登录后进行取证。
 
