@@ -66,7 +66,46 @@ WP:
 >
 > 结果为`3`
 
-# 获取 APK
+
+
+# 安卓模拟器 图形密码绕过
+
+安卓版本是 7.1.2，模拟器是夜神模拟器7.0.5，通过替换安装目录下虚拟机文件的方式来仿真，题目作者是用的软件来仿真的。
+
+https://cloud.tencent.com/developer/article/2272887
+
+---
+
+此题仿真后打开模拟器，查看浏览器的设置即可，但是想要查看浏览器的设置，首先要解锁手机，单纯绕过密码解锁手机的方式很简单，在模拟器所在目录的bin目录下有adb.exe，可以用它来调用shell执行一些命令
+
+首先打开模拟器，然后在bin目录打开cmd，执行`adb.exe shell`，接下来我们只需要找到储存锁屏密钥的文件并将其删去即可
+
+我们通过夜神模拟器可以得知这个安卓虚拟机的版本是Android 7，此版本的锁屏密码相关文件如下
+
+```javascript
+/data/system/gatekeeper.pattern.key
+/data/system/gatekeeper.password.key
+```
+
+我们先将这两个文件复制出来，在接下来解锁屏密码时会用到
+
+```javascript
+adb pull /data/system/gatekeeper.pattern.key C:\Users\poiuy\Desktop
+adb pull /data/system/gatekeeper.password.key C:\Users\poiuy\Desktop
+```
+
+然后再删掉
+
+```javascript
+rm -rf /data/system/gatekeeper.pattern.key
+rm -rf /data/system/gatekeeper.password.key
+```
+
+删除后重启即可直接进入模拟器
+
+# APK 逆向
+
+## 获取 APK
 
 ADB 环境下：
 1、连接手机
@@ -82,3 +121,11 @@ ADB 环境下：
 
 5、将 APK 导出到 PC 端进行保存
 输入 adb 命令：`adb pull “手机APK文件路径” “PC文件夹路径”`
+
+
+
+# Android WiFi 信息
+
+`/misc/wifi`
+
+![image-20231213002446019](img/Android 取证.assets/image-20231213002446019.png)
