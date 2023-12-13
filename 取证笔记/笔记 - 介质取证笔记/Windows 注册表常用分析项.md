@@ -115,6 +115,12 @@ HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run
 
 ![image-20231213170422510](img/Windows 注册表常用分析项.assets/image-20231213170422510.png)
 
+https://www.doc88.com/p-9107655008710.html?r=1
+
+![image-20231213195759103](img/Windows 注册表常用分析项.assets/image-20231213195759103.png)
+
+![image-20231213195817300](img/Windows 注册表常用分析项.assets/image-20231213195817300.png)
+
 ### 挂载过的设备
 
 ```
