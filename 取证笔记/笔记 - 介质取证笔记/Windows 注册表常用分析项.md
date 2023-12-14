@@ -58,8 +58,6 @@ SOFTWARE：分支是HKEY_LOCAL_MACHINE\SOFTWARE，文件存储在C:\Windows\Syst
 
 `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU`
 
-https://www.doc88.com/p-9107655008710.html?r=1
-
 ## 网络信息
 
 ### 连接过的网络
@@ -159,3 +157,57 @@ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs
 
 
 
+# 使用 AutoPsy 等软件进行离线分析
+
+## 系统基本信息
+
+### 操作系统版本信息
+
+```
+SOFTWARE\Microsoft\Windows NT\CurrentVersion
+```
+
+![image-20231214101800340](img/Windows 注册表常用分析项.assets/image-20231214101800340.png)
+
+### 系统时区信息
+
+```
+SYSTEM\ControlSet001\Control\TimeZoneInformation
+```
+
+![image-20231214102001723](img/Windows 注册表常用分析项.assets/image-20231214102001723.png)
+
+## 网络信息
+
+### 网络连接记录
+
+```
+SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles\
+以及 Signatures
+```
+
+![image-20231214092101669](img/Windows 注册表常用分析项.assets/image-20231214092101669.png)
+
+### TCP/IP 连接记录（分配IP等）
+
+```
+SYSTEM\(Control Sets)\services\Tcpip\Parameters\Interfaces
+```
+
+![image-20231214092442141](img/Windows 注册表常用分析项.assets/image-20231214092442141.png)
+
+## 应用运行记录
+
+```
+System\ControlSet001\Control\Session Manager\AppCompatCache
+```
+
+![image-20231214110326008](img/Windows 注册表常用分析项.assets/image-20231214110326008.png)
+
+### Amcache
+
+```
+C:\Windows\appcompat\Programs\Amcache.hve
+```
+
+![image-20231214110612547](img/Windows 注册表常用分析项.assets/image-20231214110612547.png)
