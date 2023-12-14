@@ -105,6 +105,10 @@ HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run
 
 这里面的 `RunOnce` 也要注意，也可能被用来启动木马，维持状态。
 
+在 `Services` 下：2=自动启动；3=手动启动；4=禁用
+
+另外在 `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run` 中，可能有对特定用户登陆时设置的启动项。
+
 ### USB 存储设备使用记录
 
 ```
