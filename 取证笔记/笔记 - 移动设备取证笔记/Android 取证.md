@@ -18,7 +18,7 @@
 
 ## WiFi 配置文件（原生应用）
 
-`WifiConfigStore.xml`
+`\misc\apexdata\com.android.wifi\WifiConfigStore.xml`
 
 ![image-20231203163356963](img/Android 取证.assets/image-20231203163356963.png)
 
