@@ -28,6 +28,8 @@ Windows 版本信息：`Windows internal version`，`Windows installation date`�
 
 Windows 安装语言（也不知道是不是正在使用的语言）：`Windows installation language`
 
+Windows 安装时间：`Windows installation date`
+
 可移动设备：`Windows portable devices`
 
 启用的服务：`Services installed`
@@ -54,7 +56,7 @@ IE输入记录：`URLs typed in Internet Explorer`
 
 打开过的文件：`Documents opened`，`Recent File List`
 
-用户账户（但是看不到用户名，只能看到SID）：`User Account
+用户账户（但是看不到用户名，只能看到SID）：`User Account`
 
 最后登录用户：`Last logged on user`
 
