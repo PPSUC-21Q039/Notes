@@ -192,6 +192,48 @@ SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles\
 
 ![image-20231214092101669](img/Windows 注册表常用分析项.assets/image-20231214092101669.png)
 
+### NetDrive 连接记录（\\IP）
+
+用户目录下的 `NTUSER.DAT`
+
+> ## 33. [单选题]AGC-CS计算机里的用户 'Carson' 链接了一个网络磁盘机 (Network Drive)，在下列哪一个档案有相关资料? (2分)
+>
+> A. \Users\Carson\NTUSER.DAT
+>
+> B. \Users\admin\NTUSER.DAT
+>
+> C. \Windows\System32\config\SYSTEM
+>
+> D. \Windows\System32\config\SOFTWARE
+>
+> E. \Windows\System32\config\SECURITY
+>
+> 网络磁盘采用`\\ip`的方式进行访问，查看资源管理器的记录
+>
+> [![img](img/Windows 注册表常用分析项.assets/2817142-20221126154016407-1687192735.png)](https://img2022.cnblogs.com/blog/2817142/202211/2817142-20221126154016407-1687192735.png)
+>
+> 跳转到源文件即可
+>
+> [![img](img/Windows 注册表常用分析项.assets/2817142-20221126154016603-490153687.png)](https://img2022.cnblogs.com/blog/2817142/202211/2817142-20221126154016603-490153687.png)
+>
+> 结果为`A`
+>
+> ## 34. [单选题]承上题，用户 'Carson' 连接的网络磁盘机的IP地址是什么? (1分)
+>
+> A. \\192.168.182.134\
+>
+> B. \\192.168.182.134\photo
+>
+> C. \\192.168.182.134\share
+>
+> D. \\192.168.182.134\AGC
+>
+> E. \\192.168.182.134\AGC photo
+>
+> 见上题
+>
+> 结果为`C`
+
 ### TCP/IP 连接记录（分配IP等）
 
 ```
