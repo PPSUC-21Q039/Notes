@@ -33,6 +33,8 @@
 > [![img](img/Linux 密码绕过、修改、破解.assets/2817142-20220605223526558-1430204492.png)](https://img2022.cnblogs.com/blog/2817142/202206/2817142-20220605223526558-1430204492.png)
 >
 > 结果为`root`
+>
+> john -w=password.lst shadow
 
 ---
 

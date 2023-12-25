@@ -1,5 +1,7 @@
 # 密码破解-john的使用
 
+`john -w=password.lst shadow`
+
 john类似于`hashcat`一样，也是一款密码破解方式，john跟专注于系统密码的破解，并且和`hashcat`一样在`kali`中自带
 
 hash请见[hash的简单使用](https://www.cnblogs.com/Junglezt/p/16044372.html)
