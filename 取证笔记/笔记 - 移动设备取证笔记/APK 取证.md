@@ -295,3 +295,10 @@ SHA-256 Fingerprint: C9 54 93 84 3F 28 E9 46 97 A2 14 96 A7 7F DE AD 1A 27 27 04
 org.zywx.wbpalmstar.uex11818.activity.SplashActivity
 ```
 
+
+
+## DCLOUD 调证值
+
+![image-20231230002831079](img/APK 取证.assets/image-20231230002831079.png)
+
+`DCLOUD_STREAMAPP_CHANNEL` 
