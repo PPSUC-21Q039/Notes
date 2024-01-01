@@ -8,3 +8,8 @@
 
 
 
+`docker ps -a` 可以查看之前运行过的配置，然后用 `docker start` 就能按照之前的配置来启动。
+
+![image-20231231191401977](img/Dockers 取证要点.assets/image-20231231191401977.png)
+
+之后使用 `docker exec -it b /bin/bash` 即可进入到 docker 里面。
